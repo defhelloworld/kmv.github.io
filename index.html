@@ -1,0 +1,3216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КМВ — Кавказские Минеральные Воды</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0000FF;
+    --blue-dark: #0000cc;
+    --blue-light: #3399ff;
+    --sky: #e8f4fd;
+    --white: #ffffff;
+    --text: #1a2a3a;
+    --gray: #7a8fa6;
+    --border: #c5d8f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'PT Sans', sans-serif;
+    color: var(--text);
+    line-height: 1.7;
+    position: relative;
+  }
+
+  /* Global blurred background fixed behind everything */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url('images/about_bg.png') center center / cover no-repeat;
+    filter: blur(6px);
+    transform: scale(1.05);
+    z-index: -2;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: -1;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: rgba(0, 0, 180, 0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: padding 0.35s ease, background 0.35s ease;
+  }
+
+  header.scrolled {
+    background: rgba(0, 0, 140, 0.82);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    transition: padding 0.35s ease;
+  }
+
+  header.scrolled .header-inner {
+    padding: 8px 32px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 48px;
+    height: 33px;
+    flex-shrink: 0;
+    mix-blend-mode: screen;
+    border-radius: 4px;
+    transition: width 0.35s ease, height 0.35s ease;
+  }
+
+  header.scrolled .logo-icon {
+    width: 36px;
+    height: 25px;
+  }
+
+  .logo-text {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    transition: opacity 0.35s, font-size 0.35s;
+    white-space: nowrap;
+  }
+
+  header.scrolled .logo-text {
+    font-size: 0.72rem;
+    opacity: 0.65;
+  }
+
+  nav { display: none; }
+
+  /* ===== BURGER ===== */
+  .burger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    z-index: 201;
+    position: relative;
+  }
+
+  .burger-btn:hover { background: rgba(255,255,255,0.1); }
+
+  .burger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+    transform-origin: center;
+  }
+
+  .burger-btn.open .burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger-btn.open .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .burger-btn.open .burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Overlay затемнение */
+  .menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 150;
+    transition: opacity 0.3s;
+  }
+
+  .menu-overlay.open { display: block; }
+
+  /* Боковая панель */
+  .side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background: #2a2a2e;
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.5);
+  }
+
+  .side-menu.open { transform: translateX(0); }
+
+  .side-menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    min-height: 64px;
+  }
+
+  .side-menu-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .side-menu-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .side-menu-close:hover { color: white; background: rgba(255,255,255,0.08); }
+
+  .side-menu-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+    flex: 1;
+  }
+
+  .side-menu-nav a {
+    display: block;
+    padding: 14px 28px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: background 0.15s, color 0.15s, padding-left 0.2s;
+    border-left: 3px solid transparent;
+  }
+
+  .side-menu-nav a:hover {
+    background: rgba(255,255,255,0.06);
+    color: white;
+    padding-left: 34px;
+    border-left-color: var(--blue-light);
+  }
+
+  .side-menu-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 8px 28px;
+  }
+
+  .side-menu-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    padding: 8px 28px 4px;
+  }
+
+  /* ===== SECTION TITLES ===== */
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 24px;
+    letter-spacing: 0.01em;
+  }
+
+  #about .section-title {
+    color: #ffffff;
+  }
+
+  /* ===== ABOUT SECTION ===== */
+  #about {
+    padding: 0;
+  }
+
+  #about .about-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 32px 60px;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 56px;
+    align-items: start;
+  }
+
+  .about-text p {
+    margin-bottom: 16px;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .about-text p:last-child { margin-bottom: 0; }
+
+  .weather-block {
+    margin-top: 28px;
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 4px solid var(--blue-light);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 20px;
+  }
+
+  .weather-block h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+
+  .weather-seasons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  /* 7-day forecast widget */
+  .forecast-card {
+    margin-top: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+
+  .forecast-title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+  }
+
+  .forecast-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  .forecast-day {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 10px 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s;
+  }
+
+  .forecast-day:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .forecast-day.today {
+    border-color: var(--blue-light);
+    background: rgba(51, 153, 255, 0.15);
+  }
+
+  .forecast-day-name {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .forecast-day.today .forecast-day-name {
+    color: var(--blue-light);
+  }
+
+  .forecast-day-date {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .forecast-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .forecast-temp-max {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .forecast-temp-min {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .forecast-desc {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .forecast-loading {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.88rem;
+    padding: 10px 0;
+    grid-column: 1 / -1;
+  }
+
+  .forecast-error {
+    color: rgba(255, 120, 120, 0.85);
+    font-size: 0.82rem;
+    padding: 8px 0;
+  }
+
+  .forecast-note {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 10px;
+    text-align: right;
+  }
+
+  .season-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .season-card .season-name {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--blue-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .season-card p {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 0 !important;
+  }
+
+  .about-images {
+    display: flex;
+    flex-direction: column;
+    object-fit: contain;
+    gap: 14px;
+  }
+
+  .about-img-placeholder {
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    object-fit: contain;
+  }
+
+  /* ===== ATTRACTIONS ===== */
+  #attractions {
+    background: transparent;
+    padding: 72px 0 60px;
+  }
+
+  .attractions-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .city-group {
+    margin-bottom: 48px;
+  }
+
+  .city-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 12px 0;
+    border-bottom: 2px solid var(--blue-light);
+    margin-bottom: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .attraction-row {
+    display: flex;
+    align-items: stretch;
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    transition: background 0.15s;
+    min-height: 130px;
+  }
+
+  .attraction-row:last-child { border-bottom: none; }
+  .attraction-row:hover { background: rgba(255, 255, 255, 0.18); }
+
+  .attr-img {
+    width: 220px;
+    flex-shrink: 0;
+    background: #111;
+    border-radius: 10px;
+    margin: 12px 0 12px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .attr-content {
+    flex: 1;
+    padding: 18px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .attr-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+
+  .attr-short {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 10px;
+  }
+
+  .attr-expand-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 4px;
+  }
+
+  .attr-expand-line hr {
+    flex: 1;
+    border: none;
+    border-top: 1.5px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .attr-arrow {
+    width: 26px;
+    height: 26px;
+    border: 2px solid var(--blue-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s, background 0.2s;
+    color: var(--blue-light);
+    font-size: 22px;
+  }
+
+  .attr-expand-line:hover .attr-arrow {
+    background: var(--blue-light);
+    color: white;
+    border-color: var(--blue-light);
+  }
+
+  .attr-full {
+    display: none;
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+    animation: fadeDown 0.25s ease;
+  }
+
+  .attr-full.open { display: block; }
+
+  .attr-full p {
+    margin-bottom: 10px;
+    line-height: 1.65;
+  }
+
+  .attr-full p:last-child { margin-bottom: 0; }
+
+  .attr-arrow.rotated { transform: rotate(180deg); }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== SANATORIA ===== */
+  #sanatoria {
+    padding: 72px 0 60px;
+  }
+
+  .san-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .san-intro {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.97rem;
+    margin-bottom: 32px;
+    margin-top: -12px;
+  }
+
+  .san-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .san-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 18px 0;
+    transition: background 0.15s;
+  }
+
+  .san-row:last-child { border-bottom: none; }
+  .san-row:hover { background: rgba(255,255,255,0.04); border-radius: 10px; }
+
+  /* Номер */
+  .san-num {
+    width: 44px;
+    flex-shrink: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.15);
+    text-align: center;
+  }
+
+  /* Фото + баббл */
+  .san-img-wrap {
+    position: relative;
+    width: 140px;
+    height: 90px;
+    flex-shrink: 0;
+    margin: 0 20px;
+    border-radius: 8px;
+    overflow: visible;
+  }
+
+  .san-img {
+    width: 140px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    cursor: pointer;
+  }
+
+  .san-img-placeholder {
+    width: 140px;
+    height: 90px;
+    background: linear-gradient(135deg, rgba(0,0,100,0.5), rgba(0,60,180,0.4));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  /* Баббл с картой */
+  .san-map-bubble {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    border: 2px solid rgba(255,255,255,0.2);
+    z-index: 50;
+    background: #1a1a2e;
+  }
+
+  .san-map-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-bottom: 0;
+    border-top-color: rgba(255,255,255,0.2);
+    pointer-events: none;
+  }
+
+  .san-map-bubble iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .san-img-wrap:hover .san-map-bubble {
+    display: block;
+  }
+
+  /* Текст */
+  .san-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .san-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+  }
+
+  .san-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .san-city {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--blue-light);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(51,153,255,0.15);
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .san-stars {
+    font-size: 0.85rem;
+    color: #f5c518;
+    letter-spacing: -1px;
+  }
+
+  .san-desc {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .san-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .san-tag {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .san-price {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    background: rgba(51,153,255,0.12);
+    border: 1px solid rgba(51,153,255,0.25);
+    border-radius: 20px;
+    padding: 3px 12px;
+  }
+
+  .san-price-val {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--blue-light);
+    white-space: nowrap;
+  }
+
+  .san-price-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    white-space: nowrap;
+  }
+
+  /* ===== САНАТОРИЙ — РАСКРЫВАЮЩЕЕСЯ ОПИСАНИЕ ===== */
+  .san-expand-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 10px;
+  }
+
+  .san-expand-line hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .san-arrow {
+    width: 26px;
+    height: 26px;
+    border: 2px solid var(--blue-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: self-end;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s, background 0.2s;
+    color: var(--blue-light);
+    font-size: 22px;
+    line-height: 37px;
+    text-align: center;
+  }
+
+  .san-expand-line:hover .san-arrow {
+    background: var(--blue-light);
+    color: white;
+  }
+
+  .san-arrow.open { transform: rotate(180deg); }
+
+  .san-full {
+    display: none;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.65;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,0.12);
+    animation: fadeDown 0.25s ease;
+  }
+
+  .san-full.open { display: block; }
+  .san-full p { margin-bottom: 8px; }
+  .san-full p:last-child { margin-bottom: 0; }
+
+  /* ===== ПОДБОРЩИК ===== */
+  .picker-wrap { margin-bottom: 36px; }
+
+  .picker-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 14px;
+  }
+
+  .picker-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .picker-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 30px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.88rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    user-select: none;
+  }
+
+  .picker-chip:hover {
+    border-color: var(--blue-light);
+    color: white;
+    background: rgba(51,153,255,0.1);
+  }
+
+  .picker-chip.selected {
+    border-color: var(--blue-light);
+    background: rgba(51,153,255,0.2);
+    color: white;
+  }
+
+  .picker-chip .chip-icon { font-size: 1rem; }
+
+  .picker-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .picker-btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 10px 28px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.03em;
+  }
+
+  .picker-btn:active { transform: scale(0.97); }
+
+  .picker-btn-primary { background: var(--blue); color: white; }
+  .picker-btn-primary:hover { background: var(--blue-dark); }
+
+  .picker-btn-reset {
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.55);
+    border: 1.5px solid rgba(255,255,255,0.12);
+  }
+
+  .picker-btn-reset:hover { background: rgba(255,255,255,0.12); color: white; }
+
+  .picker-hint {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.3);
+    margin-left: 4px;
+  }
+
+  .picker-result-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blue-light);
+    margin-bottom: 16px;
+    letter-spacing: 0.04em;
+  }
+
+  .picker-empty {
+    padding: 32px 0;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .picker-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 24px 0;
+  }
+
+  /* ===== AFISHA ===== */
+  #afisha {
+    padding: 56px 0 48px;
+  }
+
+  .afisha-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .afisha-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .afisha-meta {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-left: auto;
+  }
+
+  .afisha-carousel-wrap {
+    position: relative;
+  }
+
+  /* стрелки */
+  .afisha-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.45);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+
+  .afisha-btn:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+
+  .afisha-btn-left  { left: -20px; }
+  .afisha-btn-right { right: -20px; }
+
+  /* полоса прокрутки */
+  .afisha-grid {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 8px 4px 16px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+  }
+
+  .afisha-grid::-webkit-scrollbar { height: 4px; }
+  .afisha-grid::-webkit-scrollbar-track { background: transparent; }
+  .afisha-grid::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+  }
+
+  .afisha-card {
+    flex: 0 0 260px;
+    width: 260px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.2s, transform 0.2s;
+    text-decoration: none;
+  }
+
+  .afisha-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+  }
+
+  .afisha-card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    background: #1a1a2e;
+  }
+
+  .afisha-card-img-placeholder {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, rgba(0,0,150,0.4), rgba(0,80,200,0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+  }
+
+  .afisha-card-body {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .afisha-card-date {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--blue-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .afisha-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.35;
+  }
+
+  .afisha-card-venue {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.4;
+  }
+
+  .afisha-card-desc {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .afisha-card-link {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--blue-light);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+  }
+
+  .afisha-empty {
+    flex: 0 0 100%;
+    text-align: center;
+    padding: 48px 0;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.95rem;
+  }
+
+  .afisha-source {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+    text-align: right;
+  }
+
+  .afisha-source a {
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: underline;
+  }
+
+  .afisha-source code {
+    background: rgba(255,255,255,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+  }
+
+  /* ===== ПИТАНИЕ ===== */
+  #food {
+    padding: 72px 0 60px;
+  }
+
+  .food-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .food-intro {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.97rem;
+    margin-bottom: 36px;
+    margin-top: -12px;
+  }
+
+  .food-city-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 10px 0;
+    border-bottom: 2px solid var(--blue-light);
+    margin-bottom: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .food-city-group {
+    margin-bottom: 40px;
+  }
+
+  .food-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 20px 0;
+    transition: background 0.15s;
+  }
+
+  .food-row:last-child { border-bottom: none; }
+  .food-row:hover { background: rgba(255,255,255,0.04); border-radius: 10px; }
+
+  .food-type-badge {
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+    padding-top: 4px;
+    font-size: 1.4rem;
+  }
+
+  .food-img-wrap {
+    width: 140px;
+    height: 90px;
+    flex-shrink: 0;
+    margin: 0 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(0,0,100,0.5), rgba(0,60,180,0.4));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+  }
+
+  .food-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .food-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+
+  .food-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .food-type {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--blue-light);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(51,153,255,0.12);
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .food-rating {
+    font-size: 0.82rem;
+    color: #f5c518;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .food-desc {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .food-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .food-addr {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.35);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .food-check {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .food-review {
+    margin-top: 8px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.4);
+    font-style: italic;
+    border-left: 2px solid rgba(51,153,255,0.3);
+    padding-left: 10px;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: rgba(0,0,180,0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.85);
+    padding: 40px 32px 32px;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .footer-left {
+    flex: 1;
+  }
+
+  .footer-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    color: white;
+    margin-bottom: 10px;
+  }
+
+  .footer-left p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 340px;
+  }
+
+  .footer-map {
+    width: 320px;
+    height: 320px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 3px solid rgba(255,255,255,0.25);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+
+  .footer-map iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* ===== SECTION DIVIDER ===== */
+  .section-divider {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#about" class="logo">
+      <img src="images/mountain_icon.png" alt="Горы" class="logo-icon">
+      <span class="logo-text">КМВ &nbsp;·&nbsp; Путеводитель</span>
+    </a>
+    <button class="burger-btn" id="burgerBtn" onclick="toggleMenu()" aria-label="Меню">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
+  </div>
+</header>
+
+<!-- Затемнение фона -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+<!-- Боковое меню -->
+<div class="side-menu" id="sideMenu">
+  <div class="side-menu-top">
+    <span class="side-menu-logo">КМВ</span>
+    <button class="side-menu-close" onclick="closeMenu()">✕</button>
+  </div>
+  <nav class="side-menu-nav">
+    <div class="side-menu-label">Навигация</div>
+    <a href="#about"       onclick="closeMenu()">Главное о КМВ</a>
+    <a href="#afisha"      onclick="closeMenu()">Афиша</a>
+    <a href="#attractions" onclick="closeMenu()">Достопримечательности</a>
+    <a href="#sanatoria"   onclick="closeMenu()">Санатории</a>
+    <a href="#food"        onclick="closeMenu()">Питание</a>
+    <div class="side-menu-divider"></div>
+    <div class="side-menu-label">Полезное</div>
+    <a href="know.html"        onclick="closeMenu()">Что нужно знать?</a>
+    <a href="faq.html"         onclick="closeMenu()">FAQ</a>
+  </nav>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <h2 class="section-title">Главное о Кавказских Минеральных Водах</h2>
+      <p>Кавказские Минеральные Воды — уникальный федеральный курортный регион на юге России, объединяющий четыре города-курорта: Пятигорск, Кисловодск, Ессентуки и Железноводск. На протяжении более двух столетий регион остаётся главной здравницей страны — сюда приезжают прежде всего за <strong>лечением и оздоровлением</strong>.</p>
+      <p>В КМВ сосредоточено свыше 130 источников минеральной воды разнообразного химического состава. Здешние воды и грязи лечат заболевания желудочно-кишечного тракта, сердечно-сосудистой, нервной и эндокринной систем. Именно лечебный туризм составляет основу местной туристической отрасли, а многие гости приезжают сюда снова и снова по путёвкам или самостоятельно.</p>
+      <p>Вместе с тем КМВ — это не только санаторные корпуса. Регион богат <strong>историческими и природными памятниками</strong>: здесь жили и творили Лермонтов и Пушкин, сохранились уникальные парковые ансамбли XIX века, величественные горы, озёра и ущелья Приэльбрусья всего в нескольких часах езды. Природа, история и целебные воды сплелись здесь воедино, делая КМВ самобытным и многогранным направлением для путешествий.</p>
+
+      <div class="weather-block">
+        <h3>☁ Климат и погодные условия</h3>
+        <p>КМВ расположены на высоте 500–1000 м над уровнем моря у северных склонов Большого Кавказа. Климат умеренно континентальный, мягкий, с выраженными временами года. Летом преобладает тёплая и солнечная погода, зима относительно мягкая. Регион пригоден для лечебного отдыха круглогодично.</p>
+        <div class="weather-seasons">
+          <div class="season-card">
+            <div class="season-name">🌸 Весна</div>
+            <p>+8…+18 °C. Умеренная влажность, обильное цветение, нередки кратковременные дожди.</p>
+          </div>
+          <div class="season-card">
+            <div class="season-name">☀ Лето</div>
+            <p>+22…+30 °C. Солнечно, жарко. Возможны грозы. Пик туристического сезона.</p>
+          </div>
+          <div class="season-card">
+            <div class="season-name">🍂 Осень</div>
+            <p>+8…+20 °C. Золотые пейзажи, менее многолюдно. Отличный сезон для лечения.</p>
+          </div>
+          <div class="season-card">
+            <div class="season-name">❄ Зима</div>
+            <p>0…+6 °C. Мягкая, снегопады редки. Санатории работают, цены ниже.</p>
+          </div>
+        </div>
+
+        <!-- 7-day forecast -->
+        <div class="forecast-card" id="forecast-card">
+          <div class="forecast-title">📅 Погода в Пятигорске на 7 дней</div>
+          <div class="forecast-days" id="forecast-days">
+            <div class="forecast-loading">Загрузка прогноза…</div>
+          </div>
+          <div class="forecast-note" id="forecast-note"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-images">
+      <img src="images/backgroudmountains.jpg" alt="" style="width:110%; height:443px; object-fit:cover; border-radius:12px;">
+      <img src="images/kavminvodi.jpg" alt="" style="width:110%; height:443px; object-fit:cover; border-radius:12px;">
+      <img src="images/mountains.jpg" alt="" style="width:110%; height:443px; object-fit:cover; border-radius:12px;">
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- AFISHA -->
+<section id="afisha">
+  <div class="afisha-inner">
+    <div class="afisha-header">
+      <h2 class="section-title" style="margin-bottom:0;">Афиша Пятигорска</h2>
+      <div class="afisha-meta" id="afisha-meta">Загрузка событий…</div>
+    </div>
+    <div class="afisha-carousel-wrap">
+      <button class="afisha-btn afisha-btn-left"  onclick="afishaScroll(-1)">&#8249;</button>
+      <div class="afisha-grid" id="afisha-grid"></div>
+      <button class="afisha-btn afisha-btn-right" onclick="afishaScroll(1)">&#8250;</button>
+    </div>
+    <div class="afisha-source">
+      Источник: <a href="https://www.pyatigorsk.online/poster/" target="_blank">pyatigorsk.online/poster</a>
+      &nbsp;·&nbsp; Данные обновляются раз в неделю
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ATTRACTIONS -->
+<section id="attractions">
+  <div class="attractions-inner">
+    <h2 class="section-title" style="padding-top:8px;">Достопримечательности</h2>
+
+    <!-- PYATIGORSK -->
+    <div class="city-group">
+      <div class="city-label">Пятигорск</div>
+      <!-- 7 rows -->
+      <div id="attr-rows-pyatigorsk"></div>
+    </div>
+
+    <!-- KISLOVODSK -->
+    <div class="city-group">
+      <div class="city-label">Кисловодск</div>
+      <div id="attr-rows-kislovodsk"></div>
+    </div>
+
+    <!-- ESSENTUKI -->
+    <div class="city-group">
+      <div class="city-label">Ессентуки</div>
+      <div id="attr-rows-essentuki"></div>
+    </div>
+
+    <!-- ZHELEZNOVODSK -->
+    <div class="city-group">
+      <div class="city-label">Железноводск</div>
+      <div id="attr-rows-zheleznovodsk"></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SANATORIA -->
+<section id="sanatoria">
+  <div class="san-inner">
+    <h2 class="section-title">Санатории и курорты</h2>
+    <p class="san-intro">Выберите свои показания — мы подберём подходящие санатории КМВ.</p>
+
+    <div class="picker-wrap">
+      <div class="picker-label">Ваши показания (можно выбрать несколько)</div>
+      <div class="picker-grid" id="picker-grid"></div>
+      <div class="picker-actions">
+        <button class="picker-btn picker-btn-primary" onclick="runPicker()">Подобрать санаторий</button>
+        <button class="picker-btn picker-btn-reset" onclick="resetPicker()">Сбросить</button>
+        <span class="picker-hint" id="picker-hint"></span>
+      </div>
+    </div>
+
+    <div class="picker-divider" id="picker-divider" style="display:none"></div>
+    <div class="picker-result-title" id="picker-result-title" style="display:none"></div>
+    <div class="san-list" id="san-list"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FOOD -->
+<section id="food">
+  <div class="food-inner">
+    <h2 class="section-title">Питание</h2>
+    <p class="food-intro">Лучшие рестораны, кафе и столовые КМВ по отзывам туристов — на любой вкус и бюджет.</p>
+    <div id="food-list"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-title">КМВ — Кавказские Минеральные Воды</div>
+      <p>Электронный путеводитель по главному лечебно-оздоровительному региону России. Пятигорск, Кисловодск, Ессентуки, Железноводск.</p>
+    </div>
+    <div class="footer-map">
+      <iframe
+        src="https://maps.google.com/maps?q=Pyatigorsk,Russia&z=12&output=embed"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</footer>
+
+<script>
+const attractions = {
+  pyatigorsk: [
+    {
+      name: "Провал",
+      img: "images/background_sights/paytigorsk/proval.jpg",
+      short: "Природное озеро в гроте горы Машук с лазурной минеральной водой.",
+      full: `<p>Провал — одна из самых необычных и загадочных природных достопримечательностей Пятигорска. Это карстовая воронка глубиной около 41 метра с небольшим озером на дне, вода которого окрашена в удивительный лазурно-голубой цвет. Такой цвет объясняется присутствием в воде серы и особых микроорганизмов — тионовых бактерий.</p>
+      <p><strong>История.</strong> Первые упоминания о Провале относятся к 1793 году — его описал академик Паллас. Поначалу в грот спускались на верёвках, и это считалось настоящим приключением. В 1858 году по инициативе князя Голицына был пробит тоннель длиной около 58 метров, по которому теперь можно войти к озеру пешком. Строительство тоннеля финансировалось за счёт пожертвований и стало значимым событием для всего курортного региона.</p>
+      <p><strong>Интересные факты.</strong> Провал навсегда вошёл в литературную историю благодаря роману Михаила Булгакова «Мастер и Маргарита» — именно здесь Остап Бендер продавал билеты к озеру, «чтобы Провал не проваливался». У входа в тоннель установлена бронзовая скульптура Бендера, которая стала любимым местом для фотографий туристов. По традиции потереть нос скульптуры — к удаче. Температура воды в озере держится на уровне +26 °C круглый год, а уровень воды периодически меняется в зависимости от осадков и сезона.</p>`
+    },
+    {
+      name: "Гора Машук",
+      img: "images/background_sights/paytigorsk/mashuk.jpg",
+      short: "Символ Пятигорска, на вершину ведёт канатная дорога с панорамой на Эльбрус.",
+      full: `<p>Машук — отдельно стоящий лакколит высотой 993 метра над уровнем моря, возвышающийся над Пятигорском и ставший его подлинным символом. Гора уникальна тем, что на её склонах сосредоточено более 30 минеральных источников различного состава — именно это сделало Пятигорск главным курортом Кавказских Минеральных Вод.</p>
+      <p><strong>История.</strong> Первые исследования горы относятся к концу XVIII века. В 1810-х годах архитекторы братья Бернардацци начали обустройство склонов: были проложены терренкурные дорожки, возведены беседки и галереи. На протяжении XIX века Машук привлекал не только больных, ищущих исцеления, но и военных, учёных, поэтов. В 1883 году на вершине построили метеорологическую станцию, действующую по сей день.</p>
+      <p><strong>Канатная дорога</strong> была открыта в 1971 году и стала одной из первых в регионе. За несколько минут она поднимает туристов на вершину, откуда в ясную погоду открывается захватывающая панорама: весь Пятигорск как на ладони, а на горизонте — белоснежный двуглавый Эльбрус. С вершины в хорошую погоду видно все четыре города-курорта КМВ одновременно. Машук также известен как место гибели Михаила Лермонтова: именно у его северного подножия в 1841 году состоялась роковая дуэль.</p>`
+    },
+    {
+      name: "Домик Лермонтова",
+      img: "images/background_sights/paytigorsk/domik.jpg",
+      short: "Мемориальный музей — последнее место жительства поэта перед дуэлью.",
+      full: `<p>Небольшой саманный домик под камышовой крышей — одно из самых трогательных мест Пятигорска. Именно здесь Михаил Юрьевич Лермонтов провёл последние два месяца своей жизни — с мая по июль 1841 года. Сегодня это старейший литературный музей Северного Кавказа, открытый ещё в 1884 году.</p>
+      <p><strong>История.</strong> Лермонтов снимал домик вместе со своим другом, капитаном Алексеем Столыпиным (Монго). Комплекс состоит из двух построек: в одной жил поэт, в другой — его товарищ. Интерьеры воссозданы по воспоминаниям современников и описаниям в документах того времени. Сохранились личные вещи поэта: его походная шкатулка, кольца, трубки, акварельные рисунки, сделанные самим Лермонтовым.</p>
+      <p><strong>Значимость.</strong> Лермонтов приезжал на Кавказ несколько раз — в детстве с бабушкой, затем в ссылку. Кавказ стал главной темой его творчества: здесь были написаны «Герой нашего времени», «Мцыри», «Демон». В 1841 году, за несколько недель до гибели, поэт написал в Пятигорске свои последние стихи. Музей бережно хранит атмосферу той эпохи — маленькие комнаты, простая мебель, вид на сад напоминают о том, каким был провинциальный курортный быт XIX века.</p>`
+    },
+    {
+      name: "Место дуэли Лермонтова",
+      img: "images/background_sights/paytigorsk/mesto_duel.jpg",
+      short: "Памятник у подножия Машука на месте гибели великого поэта.",
+      full: `<p>У северо-западного подножия горы Машук, среди негустого леса, стоит небольшой обелиск — памятник на месте дуэли Михаила Лермонтова. 15 июля 1841 года здесь оборвалась жизнь одного из величайших русских поэтов. Ему было всего 26 лет.</p>
+      <p><strong>История дуэли.</strong> Поводом для поединка стала многолетняя ссора Лермонтова с отставным майором Николаем Мартыновым. По воспоминаниям очевидцев, Лермонтов выстрелил в воздух, Мартынов — прицельно. Поэт погиб на месте. Обстоятельства дуэли до сих пор вызывают споры среди историков: слишком многое в этой истории осталось невыясненным. Тело поэта первоначально было похоронено в Пятигорске, и лишь спустя несколько месяцев бабушка добилась перевоза праха в родовое имение Тарханы.</p>
+      <p><strong>Памятник</strong> был установлен в 1915 году на народные пожертвования. Он представляет собой четырёхгранный обелиск из серого кавказского камня, увенчанный грифоном — символом бессмертия. По периметру ограды установлены четыре скульптуры грифонов. Место дуэли входит в состав Государственного музея-заповедника М. Ю. Лермонтова и является памятником федерального значения. Сюда приходят поклонники творчества поэта со всей России и из-за рубежа.</p>`
+    },
+    {
+      name: "Цветник",
+      img: "images/background_sights/paytigorsk/cvetnic.jpg",
+      short: "Исторический парк в центре Пятигорска с галереями, фонтанами и бюветами.",
+      full: `<p>Цветник — главный парк и общественное пространство Пятигорска, заложенный в первой половине XIX века. Его название говорит само за себя: парк утопает в цветах с ранней весны до поздней осени. Именно здесь всегда кипела курортная жизнь — гуляли офицеры, дамы в кринолинах, приезжие аристократы.</p>
+      <p><strong>История.</strong> Парк был разбит в 1829 году по проекту архитекторов Джузеппе и Джованни Бернардацци, итальянцев на русской службе, внёсших огромный вклад в облик Пятигорска. В 1849 году здесь была возведена Лермонтовская галерея — изящное чугунное строение в мавританском стиле, ставшее украшением всего курортного ансамбля. Галерея использовалась для концертов, балов и светских приёмов.</p>
+      <p><strong>Что посмотреть.</strong> В центре парка находится бювет с минеральной водой, где любой желающий может попробовать лечебную воду прямо из источника. Здесь же расположена Лермонтовская галерея, ныне — концертный и выставочный зал. В парке установлены скульптуры, в том числе знаменитый «Орёл» — символ КМВ. Цветник упоминается в произведениях Лермонтова, Толстого, Чехова — здесь отдыхали и черпали вдохновение многие великие русские писатели.</p>`
+    },
+    {
+      name: "Эолова арфа",
+      img: "images/background_sights/paytigorsk/arfa.jpg",
+      short: "Ажурная ротонда на горе Горячей — один из символов старого Пятигорска.",
+      full: `<p>Эолова арфа — изящная беседка-ротонда на скалистом уступе горы Горячей, один из самых романтичных и узнаваемых символов старого Пятигорска. Отсюда открывается один из лучших видов на город, долину реки Подкумок и снежные вершины Большого Кавказа.</p>
+      <p><strong>История.</strong> Беседка была возведена в 1831 году по проекту архитекторов Бернардацци. Своё поэтическое название она получила в честь древнегреческого бога ветра Эола. Внутри первоначально был установлен оригинальный музыкальный инструмент — арфа, струны которой приводились в колебание потоками ветра, создавая таинственную мелодию. Звуки арфы слышались по всему склону горы и производили на посетителей курорта огромное впечатление.</p>
+      <p><strong>Интересные факты.</strong> Эолову арфу упоминает в своих произведениях Лермонтов — она стала частью литературного образа Пятигорска эпохи романтизма. Оригинальный музыкальный механизм до наших дней не сохранился, однако в 1970-х годах беседку оснастили современным звуковым устройством, воспроизводящим звуки арфы и флейты. Сегодня Эолова арфа — излюбленное место для прогулок на закате: отсюда можно наблюдать, как солнце садится за горный горизонт, окрашивая небо в багровые и золотые тона.</p>`
+    },
+    {
+      name: "«Орёл, терзающий змею»",
+      img: "images/background_sights/paytigorsk/orel.jpg",
+      short: "Символ Кавказских Минеральных Вод и официальный герб города, находящийся на горе Машук.",
+      full: `<p>Скульптура орла, терзающего змею, — главный символ Кавказских Минеральных Вод и официальный герб Пятигорска. Бронзовый орёл с распростёртыми крыльями, попирающий змею, установлен на скале горы Горячей в парке Цветник и является одним из самых фотографируемых объектов всего региона.</p>
+      <p><strong>История и символика.</strong> Первая скульптура орла была установлена в 1901 году к 100-летию Кавказских Минеральных Вод. Она была выполнена из цемента скульптором Шодким по эскизу художника Евгения Лансере. Орёл символизирует могущество и победу над болезнями: птица терзает змею — олицетворение недугов. Именно этот образ был выбран как метафора целительной силы минеральных вод региона. В 1973 году обветшавшую скульптуру заменили новой — бронзовой, более детальной и выразительной.</p>
+      <p><strong>Значимость.</strong> Изображение орла со змеёй присутствует на гербах всех четырёх городов-курортов КМВ. Скульптура стала настоящим брендом региона: её изображение можно увидеть на сувенирах, открытках, упаковках минеральной воды. Существует традиция: приезжая на КМВ впервые, нужно сфотографироваться у орла — это считается знаком того, что вы вернётесь сюда снова.</p>`
+    },
+  ],
+  kislovodsk: [
+    {
+      name: "Национальный парк Кисловодск",
+      img: "images/background_sights/kislovodsk/national_park.jpg",
+      short: "Один из крупнейших городских парков России — горные тропы и сосновые аллеи.",
+      full: `<p>Кисловодский национальный парк — второй по площади городской парк в мире после Центрального парка Нью-Йорка. Его территория составляет около 966 гектаров, а протяжённость прогулочных и терренкурных маршрутов превышает 100 километров. Парк поднимается с высоты 800 до 1050 метров над уровнем моря, создавая уникальный целебный микроклимат.</p>
+      <p><strong>История.</strong> История парка начинается в 1823 году, когда по указу генерала Ермолова была заложена первая регулярная аллея. На протяжении XIX века парк планомерно расширялся: высаживались деревья, прокладывались дорожки, возводились беседки и павильоны. В советское время парк был существенно расширен — его площадь увеличилась в несколько раз. В 2016 году он получил статус национального парка федерального значения.</p>
+      <p><strong>Что особенного.</strong> Парк разделён на несколько зон: Нижний, Средний и Верхний. Каждая зона имеет свой характер — от ухоженных аллей с розариями до дикого горного леса. Здесь растут сосны, дубы, клёны, плакучие ивы. Терренкуры — специальные лечебные маршруты с дозированными подъёмами — назначаются врачами санаториев как часть лечения сердечно-сосудистых заболеваний. Воздух в парке насыщен фитонцидами и отличается исключительной чистотой.</p>`
+    },
+    {
+      name: "Нарзанная галерея",
+      img: "images/background_sights/kislovodsk/national_gallery.jpg",
+      short: "Исторический бювет XIX века с живописной архитектурой и нарзанными источниками.",
+      full: `<p>Нарзанная галерея — архитектурная и историческая жемчужина Кисловодска, памятник федерального значения. Это изящное здание в мавританско-готическом стиле с открытыми галереями, колоннами и стрельчатыми арками было построено в 1858 году по проекту английского архитектора Самуэля Уптона. Здесь расположен знаменитый источник нарзана — главного минерального богатства Кисловодска.</p>
+      <p><strong>История.</strong> Слово «нарзан» происходит из кабардинского языка и означает «богатырский источник» или «напиток богатырей». Целебные свойства кисловодского нарзана были известны горцам с древних времён. Первый каменный бювет был построен в 1820-х годах, а нынешняя галерея возведена в середине XIX века и с тех пор практически не изменилась. Внутри галереи сохранились оригинальные чугунные колонны, мозаичный пол и ванная комната XIX века.</p>
+      <p><strong>Нарзан сегодня.</strong> В галерее можно попробовать три вида нарзана: общий, доломитный и сульфатный — каждый обладает своим вкусом и лечебным действием. Нарзан помогает при заболеваниях желудочно-кишечного тракта, опорно-двигательного аппарата и обмена веществ. Здание галереи окружено живописным сквером с фонтанами, скамейками и цветочными клумбами — это любимое место прогулок горожан и гостей курорта.</p>`
+    },
+    {
+      name: "Замок коварства и любви",
+      img: "images/background_sights/kislovodsk/zamok.jpg",
+      short: "Романтическое ущелье в долине реки Аликоновки с отвесными скалами.",
+      full: `<p>Замок коварства и любви — эффектное скальное образование в долине реки Аликоновки, в нескольких километрах от Кисловодска. Отвесные красноватые скалы высотой до 60 метров образуют узкое ущелье, в котором шумит горная река. Место получило своё романтическое название благодаря красивой — и печальной — легенде.</p>
+      <p><strong>Легенда.</strong> По преданию, здесь жил богатый князь, дочь которого полюбила простого пастуха. Отец, не желавший такого брака, заманил молодых людей к краю скалы под предлогом любования пейзажем, а затем столкнул пастуха в пропасть. Девушка, не перенеся горя, бросилась следом. С тех пор это место называют замком коварства и любви. Легенда, конечно, красивая — но историки считают её позднейшим туристическим изобретением.</p>
+      <p><strong>Что посмотреть.</strong> В скале прорублен тоннель, по которому можно пройти к смотровой площадке над ущельем. Вид оттуда захватывает дух: горная река внизу, сосновый лес на склонах, вдали — заснеженные вершины Кавказа. На территории работает ресторан в стилизованном «замке», сувенирные лавки. Место особенно красиво осенью, когда листва приобретает золотистые и багровые оттенки.</p>`
+    },
+    {
+      name: "Красные камни",
+      img: "images/background_sights/kislovodsk/krasniekamni.jpg",
+      short: "Скальный выход красного песчаника с бронзовым орлом — визитная карточка Кисловодска.",
+      full: `<p>Красные камни — живописный скальный массив в Кисловодском национальном парке, один из символов города. Скалы сложены из железисто-красного песчаника, который и дал им название. На самой высокой точке скал установлена бронзовая скульптура орла — близнеца пятигорского символа КМВ.</p>
+      <p><strong>Геология и история.</strong> Красноватый цвет скал объясняется высоким содержанием оксидов железа в породе. Это достаточно редкое геологическое явление для данного региона. Скалы образовались в результате многовековой эрозии горных пород. Место было облагорожено ещё в XIX веке: к скалам проложили терренкурные дорожки, оборудовали смотровые площадки.</p>
+      <p><strong>Скульптура орла</strong> была установлена здесь в советское время и стала одной из главных точек притяжения парка. Отсюда открывается панорамный вид на Кисловодск, долину реки Подкумок и горные хребты на юге. Красные камни — удобная цель для прогулок по парковым терренкурам: добраться сюда от Нарзанной галереи можно за 30–40 минут неспешной ходьбы по ухоженным аллеям. Ранним утром, когда солнце освещает скалы сбоку, их красноватый цвет становится особенно насыщенным.</p>`
+    },
+    {
+      name: "Стеклянная струя",
+      img: "images/background_sights/kislovodsk/struya.jpg",
+      short: "Прозрачный водопад-каскад в Курортном парке, отличное место для прогулок.",
+      full: `<p>Стеклянная струя — изящный искусственный водопад-каскад в нижней части Кисловодского национального парка, одно из самых романтичных мест курорта. Тонкая прозрачная плёнка воды стекает по отполированной каменной поверхности, создавая эффект стекла — именно это и дало объекту его поэтическое название.</p>
+      <p><strong>История.</strong> Каскад был создан в конце XIX века как элемент паркового ансамбля. Рядом с водопадом расположен небольшой пруд с декоративными рыбками, беседки и скамейки. Место быстро стало излюбленным для прогулок и свиданий — сюда приходили отдыхающие после питья нарзана в галерее, чтобы насладиться прохладой и журчанием воды в жаркий день.</p>
+      <p><strong>Что рядом.</strong> Стеклянная струя находится в самом начале маршрута по Курортному парку, поэтому большинство прогулок начинаются именно здесь. Рядом — «Зеркальный пруд», ресторан «Замок» и выход на главную аллею парка. Особенно живописно место выглядит ранней весной, когда вокруг всё цветёт, и в вечернее время, когда подсветка превращает водопад в настоящее световое шоу.</p>`
+    },
+    {
+      name: "Крепость Кисловодская",
+      img: "images/background_sights/kislovodsk/krepost.jpg",
+      short: "Остатки военного укрепления XIX века — памятник Кавказской войны.",
+      full: `<p>Кисловодская крепость — один из немногих сохранившихся военно-исторических памятников эпохи Кавказской войны на территории Кавказских Минеральных Вод. Именно с этой крепости начался Кисловодск как поселение: гарнизон охранял источники нарзана и мирных жителей от набегов горцев.</p>
+      <p><strong>История.</strong> Крепость была заложена в 1803 году по указу генерала Кнорринга для защиты только что открытых минеральных источников. Первоначально это было простое земляное укрепление с деревянным частоколом. В 1825 году был возведён каменный редут, от которого до наших дней сохранились фрагменты стен и башня. Крепость выдержала несколько осад и набегов, сыграв важную роль в установлении российского контроля над регионом.</p>
+      <p><strong>Сегодня.</strong> На территории крепости расположен Историко-краеведческий музей «Крепость», рассказывающий об эпохе Кавказской войны, быте казаков-первопоселенцев и истории Кисловодска. Экспозиция включает оружие, обмундирование, предметы быта XIX века, старинные карты и документы. Сохранившаяся башня является прекрасной смотровой площадкой с видом на старую часть города.</p>`
+    },
+    {
+      name: "Долина роз",
+      img: "images/background_sights/kislovodsk/dolina.jpg",
+      short: "Живописная поляна в парке с сотнями сортов роз в период летнего цветения.",
+      full: `<p>Долина роз — один из самых красивых уголков Кисловодского национального парка, открытая поляна в среднем ярусе парка, засаженная тысячами кустов роз разнообразных сортов. В период цветения — с июня по сентябрь — она превращается в настоящее море красок и ароматов.</p>
+      <p><strong>История.</strong> Розарий в этой части парка был разбит в советское время, в 1950–1960-х годах, когда активно развивался курортный комплекс Кисловодска. Розы были завезены из разных регионов страны и из-за рубежа. Постепенно розарий стал одной из главных достопримечательностей парка и украшением всего курорта.</p>
+      <p><strong>Что посмотреть.</strong> Сегодня в Долине роз представлено более 80 сортов роз — чайно-гибридные, плетистые, почвопокровные, парковые. Аллеи между клумбами выложены аккуратной плиткой, установлены беседки и скамейки. В период цветения здесь устраивают фотосессии молодожёны со всего Северного Кавказа. Долина расположена примерно на середине подъёма в парке, поэтому часто служит местом отдыха для туристов, идущих по терренкуру к Красным камням или дальше — в Верхний парк.</p>`
+    },
+  ],
+  essentuki: [
+    {
+      name: "Курортный парк",
+      img: "images/background_sights/essentiuki/park.jpg",
+      short: "Обширный парк с бюветом источника №17, питьевыми галереями и летним театром.",
+      full: `<p>Курортный парк Ессентуков — главная прогулочная зона города, зелёный оазис площадью около 50 гектаров в самом центре курорта. Именно здесь сосредоточены основные достопримечательности Ессентуков: питьевые галереи с минеральными источниками, летний театр, фонтаны и исторические павильоны.</p>
+      <p><strong>История.</strong> Парк начал формироваться в первой половине XIX века одновременно с развитием курорта. В 1847 году здесь была возведена первая питьевая галерея над источником №17 — главным источником Ессентуков. На протяжении всего XIX и начала XX века парк планомерно благоустраивался: высаживались деревья, прокладывались аллеи, строились павильоны и беседки. Здесь прогуливались Чехов, Толстой, многие видные деятели русской культуры.</p>
+      <p><strong>Источник №17.</strong> Бювет источника №17 — главная достопримечательность парка. Ессентукская вода №17 относится к лечебно-столовым водам и известна во всей России. Она показана при лечении заболеваний желудочно-кишечного тракта, печени и желчевыводящих путей. Прямо в парке можно набрать воду в стакан или бутылку и тут же выпить — как это делали курортники позапрошлого века.</p>`
+    },
+    {
+      name: "Грязелечебница Семашко",
+      img: "images/background_sights/essentiuki/lechebnica.jpg",
+      short: "Монументальное здание 1913 года в стиле неоклассицизма, действующий курорт.",
+      full: `<p>Центральная грязелечебница имени Семашко — один из самых величественных архитектурных памятников Кавказских Минеральных Вод и одновременно действующее медицинское учреждение. Монументальное здание в стиле неоклассицизма с колонными портиками и куполом было построено в 1913–1915 годах по проекту архитектора Кузнецова.</p>
+      <p><strong>История.</strong> Строительство было начато в 1911 году в связи с растущим потоком курортников и нехваткой бальнеологических учреждений. Здание возводилось как главная грязелечебница всего региона. В советское время оно было переименовано в честь Николая Семашко — первого наркома здравоохранения СССР, много сделавшего для развития советских курортов. В годы Великой Отечественной войны здание использовалось как военный госпиталь.</p>
+      <p><strong>Архитектура и лечение.</strong> Здание отличается строгой симметрией, пышным декором фасада и внушительными размерами. Внутри сохранились исторические интерьеры: мраморные полы, лепнина, просторные холлы. Лечебница специализируется на грязевых процедурах с использованием иловой сульфидной грязи озера Тамбукан. Грязевые ванны показаны при заболеваниях суставов, позвоночника, периферической нервной системы.</p>`
+    },
+    {
+      name: "Николаевские ванны",
+      img: "images/background_sights/essentiuki/vanni.jpg",
+      short: "Старейший бальнеологический комплекс Ессентуков с историческими залами.",
+      full: `<p>Николаевские ванны — старейший бальнеологический комплекс Ессентуков, построенный в 1856 году и ставший первым капитальным купальным заведением города. Здание выполнено в стиле классицизма и является памятником архитектуры федерального значения.</p>
+      <p><strong>История.</strong> До постройки Николаевских ванн отдыхающие принимали минеральные ванны прямо у источников — в примитивных деревянных купальнях. Новое каменное здание стало настоящим событием: оно позволило принимать процедуры в цивилизованных условиях. Ванны были названы в честь императора Николая I, покровительствовавшего развитию курортов КМВ. В конце XIX — начале XX века комплекс был расширен и модернизирован.</p>
+      <p><strong>Значимость.</strong> Николаевские ванны занимают особое место в истории российской бальнеологии — именно здесь отрабатывались методики минеральных ванн, впоследствии распространившиеся по всем курортам страны. Здание пережило две мировые войны, революцию и несколько реконструкций, сохранив свой исторический облик. Сегодня комплекс продолжает работу как действующий санаторный корпус.</p>`
+    },
+    {
+      name: "Источник № 4",
+      img: "images/background_sights/essentiuki/istochnik.jpg",
+      short: "Известный лечебно-питьевой источник ессентукской минеральной воды.",
+      full: `<p>Источник №4 — один из самых известных и популярных минеральных источников Ессентуков, дающий высокоминерализованную лечебную воду, богатую натрием, хлором и гидрокарбонатами. Именно эта вода широко известна под торговой маркой «Ессентуки-4» и продаётся по всей России.</p>
+      <p><strong>История открытия.</strong> Источник был открыт в начале XIX века и вскоре получил широкую известность благодаря своим выраженным лечебным свойствам. В 1823 году его исследовал известный врач Фёдор Гааз, составивший первое научное описание ессентукских источников. Нумерация источников была введена в середине XIX века по мере их систематического изучения и обустройства.</p>
+      <p><strong>Состав и применение.</strong> Вода источника №4 относится к хлоридно-гидрокарбонатно-натриевым водам с минерализацией около 10 г/л. Она показана при хронических гастритах, колитах, заболеваниях печени и желчевыводящих путей, сахарном диабете. Воду пьют в строго определённом количестве и по определённой схеме, которую назначает врач — самолечение минеральной водой может нанести вред здоровью. Бювет над источником работает ежедневно.</p>`
+    },
+    {
+      name: "Церковь Святого Пантелеймона",
+      img: "images/background_sights/essentiuki/cerkov.jpg",
+      short: "Красивый православный храм в историческом центре города.",
+      full: `<p>Церковь Святого Великомученика и Целителя Пантелеймона — один из самых красивых православных храмов Ессентуков и духовный центр города. Святой Пантелеймон испокон веков считается покровителем врачей и больных, поэтому посвящение именно ему главного храма курортного города глубоко символично.</p>
+      <p><strong>История.</strong> Первая деревянная церковь в Ессентуках была построена ещё в 1847 году. Нынешний каменный храм был возведён в начале XX века и освящён в 1912 году. Здание выполнено в русско-византийском стиле с характерными куполами, декоративными кокошниками и богато украшенными фасадами. В советские годы церковь была закрыта и использовалась как склад, однако в 1990-х годах возвращена верующим и полностью восстановлена.</p>
+      <p><strong>Что посмотреть.</strong> Интерьер церкви украшен росписями и иконостасом, восстановленными после советского периода. Особо почитаемые иконы — образ Пантелеймона Целителя и старинная икона Казанской Божией Матери. Территория вокруг церкви ухожена: аккуратный сквер с цветниками и скамейками. Храм действующий, богослужения проводятся ежедневно.</p>`
+    },
+  ],
+  zheleznovodsk: [
+    {
+      name: "Озеро Тамбуканское",
+      img: "images/background_sights/jeleznovodsk/ozero.jpg",
+      short: "Уникальное солёное озеро с лечебной грязью близ Железноводска.",
+      full: `<p>Тамбуканское озеро — уникальный природный объект в нескольких километрах от Пятигорска и Железноводска. Это солёное бессточное озеро площадью около 170 гектаров знаменито своей иловой сульфидной грязью — одной из лучших лечебных грязей в мире. Грязь Тамбукана экспортировалась ещё в царские времена и применяется в санаториях всех четырёх городов КМВ.</p>
+      <p><strong>Происхождение и состав.</strong> Озеро образовалось в результате тектонических процессов в послеледниковый период. Его питают грунтовые воды и атмосферные осадки, однако из-за высокого испарения вода в озере очень солёная — минерализация достигает 30–40 г/л. Донные отложения — тёмно-серая иловая грязь — формировались тысячелетиями из органических остатков, бактерий и минеральных веществ.</p>
+      <p><strong>Лечебное применение.</strong> Тамбуканская грязь содержит биологически активные вещества, сероводород, органические кислоты и микроэлементы. Она обладает выраженным противовоспалительным, рассасывающим и обезболивающим эффектом. Грязевые аппликации применяются при заболеваниях суставов, позвоночника, гинекологических и урологических болезнях, кожных заболеваниях. Ежегодно из озера добывают несколько тысяч тонн грязи для нужд курортов КМВ.</p>`
+    },
+    {
+      name: "Лермонтовский водопад",
+      img: "images/background_sights/jeleznovodsk/vodopad.jpg",
+      short: "Небольшой живописный каскад на горе Железной в тени лесного ущелья.",
+      full: `<p>Лермонтовский водопад — небольшой, но очень живописный каскадный водопад на склоне горы Железной, в густом широколиственном лесу Железноводского курортного парка. Он был назван в честь великого поэта Михаила Лермонтова, неоднократно бывавшего в Железноводске и восхищавшегося красотой здешней природы.</p>
+      <p><strong>История названия.</strong> Лермонтов приезжал на лечение в Железноводск в 1841 году — незадолго до своей гибели. По воспоминаниям современников, поэт любил прогуливаться по склонам горы Железной и любоваться природными красотами. Водопад был назван его именем уже после гибели поэта — как дань памяти человеку, прославившему Кавказ в своих произведениях.</p>
+      <p><strong>Что представляет собой.</strong> Водопад образован небольшим горным ручьём, который стекает по уступам известняковых скал. Высота падения воды — около 3–4 метров. Несмотря на скромные размеры, место удивительно живописно: скалы покрыты мхом и папоротниками, вокруг — вековые деревья, воздух насыщен влагой и запахом хвои. Водопад включён в стандартный маршрут прогулки по Курортному парку Железноводска.</p>`
+    },
+    {
+      name: "Дворец эмира Бухарского",
+      img: "images/background_sights/jeleznovodsk/dvorec.jpg",
+      short: "Экзотический дворец начала XX века в мавританском стиле среди курортного парка.",
+      full: `<p>Дворец эмира Бухарского — пожалуй, самое экзотическое здание на всём Кавказских Минеральных Водах. Роскошный особняк в мавританском стиле с восточными орнаментами, подковообразными арками и богатой отделкой резко контрастирует с окружающей его природой горного парка — и именно это делает его неповторимым.</p>
+      <p><strong>История.</strong> Дворец был построен в 1907 году по заказу последнего эмира Бухарского Сеид-Абдул-Ахад-хана, вассала Российской империи, регулярно приезжавшего на лечение в Железноводск. Архитектор — Василий Семёнов, мастерски воплотивший восточный стиль в кавказском контексте. Эмир прожил здесь несколько сезонов вплоть до своей смерти в 1910 году. После революции дворец был национализирован.</p>
+      <p><strong>Архитектура.</strong> Фасады здания украшены сложнейшим лепным орнаментом, стрельчатыми окнами и арками, изразцовыми панно. Внутренние интерьеры, к сожалению, не сохранились в первозданном виде — здание неоднократно перестраивалось. Сегодня во дворце располагается санаторий. Несмотря на это, здание остаётся выдающимся памятником архитектуры и привлекает внимание всех приезжающих в Железноводск.</p>`
+    },
+    {
+      name: "Пушкинская галерея",
+      img: "images/background_sights/jeleznovodsk/pushkin.jpg",
+      short: "Ажурное чугунное строение 1901 года — концертный зал и украшение парка.",
+      full: `<p>Пушкинская галерея — изящное ажурное строение из чугуна и стекла, возведённое в Железноводском курортном парке в 1901 году в честь 100-летия со дня рождения Александра Сергеевича Пушкина. Это один из лучших образцов курортной архитектуры рубежа XIX–XX веков на Кавказе.</p>
+      <p><strong>История.</strong> Галерея была спроектирована и изготовлена на заводе во Владикавказе, а затем в разобранном виде доставлена в Железноводск и собрана на месте. Технология сборных металлических конструкций была в то время передовой. Открытие галереи приурочили к юбилею великого поэта — Пушкин также бывал на Кавказе и посвятил ему немало вдохновенных строк. Изначально галерея использовалась для концертов, выставок и светских собраний курортной публики.</p>
+      <p><strong>Архитектура и современность.</strong> Лёгкая ажурная конструкция из чугунных кружевных деталей создаёт впечатление невесомости. Большие стеклянные поверхности наполняют интерьер светом. Галерея гармонично вписана в парковый ансамбль и отражается в зеркале небольшого пруда рядом. Сегодня здание используется как концертный и выставочный зал — здесь проходят музыкальные вечера, литературные чтения и культурные мероприятия.</p>`
+    },
+    {
+      name: "Гора Железная",
+      img: "images/background_sights/jeleznovodsk/gora.jpg",
+      short: "Природная возвышенность над городом с терренкурными маршрутами и видовыми точками.",
+      full: `<p>Гора Железная — лакколит высотой 851 метр над уровнем моря, давший название городу Железноводску. Это потухший вулканический массив, у подножия и на склонах которого расположено более 20 минеральных источников. Вся курортная жизнь Железноводска сосредоточена вокруг этой горы.</p>
+      <p><strong>История открытия.</strong> Железноводск был основан в 1810 году, когда доктор Фёдор Гааз обнаружил у подножия горы мощные минеральные источники. Уже в 1820 году по указу генерала Ермолова здесь начал формироваться курорт. Название «Железная» гора получила из-за рыжеватого цвета горных пород, богатых оксидами железа, — те же соединения придают характерный привкус местной минеральной воде.</p>
+      <p><strong>Терренкуры и маршруты.</strong> По склонам горы Железной проложены благоустроенные терренкурные маршруты протяжённостью от 1,5 до 6 километров с различным набором высоты. Врачи санаториев назначают ходьбу по этим маршрутам как часть лечения — дозированные физические нагрузки в сочетании с горным воздухом дают выраженный терапевтический эффект. С верхних точек маршрутов открывается панорама на Железноводск, степи Ставрополья и в ясную погоду — на Эльбрус.</p>`
+    },
+  ]
+};
+
+function buildRows(containerId, items) {
+  const container = document.getElementById(containerId);
+  items.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'attraction-row';
+    row.innerHTML = `
+      <div class="attr-img" style="background:none; padding:0;">
+        <img src="${item.img}" alt="${item.name}" style="width:100%; height:110px; object-fit:cover; border-radius:10px;">
+      </div>
+      <div class="attr-content">
+        <div class="attr-name">${item.name}</div>
+        <div class="attr-short">${item.short}</div>
+        <div class="attr-expand-line" onclick="toggleAttr(this)">
+          <hr>
+          <div class="attr-arrow" id="arrow-${containerId}-${i}">&#x2304;</div>
+        </div>
+        <div class="attr-full" id="full-${containerId}-${i}">
+          ${item.full}
+        </div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function toggleAttr(line) {
+  const arrow = line.querySelector('.attr-arrow');
+  const full = line.parentElement.querySelector('.attr-full');
+  arrow.classList.toggle('rotated');
+  full.classList.toggle('open');
+}
+
+buildRows('attr-rows-pyatigorsk', attractions.pyatigorsk);
+buildRows('attr-rows-kislovodsk', attractions.kislovodsk);
+buildRows('attr-rows-essentuki', attractions.essentuki);
+buildRows('attr-rows-zheleznovodsk', attractions.zheleznovodsk);
+
+// ===== 7-DAY WEATHER FORECAST =====
+// Используется OpenWeatherMap API (бесплатный тариф).
+// Зарегистрируйтесь на https://openweathermap.org/api и вставьте свой ключ:
+const OWM_API_KEY = '667dcf1b7d3c998333f471f9e96d6723';
+const CITY = 'Pyatigorsk,RU';
+const LANG = 'ru';
+
+const DAY_NAMES = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+const MONTH_NAMES = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+
+function weatherCodeToEmoji(id) {
+  if (id >= 200 && id < 300) return '⛈';
+  if (id >= 300 && id < 400) return '🌦';
+  if (id >= 500 && id < 510) return '🌧';
+  if (id === 511) return '🌨';
+  if (id >= 511 && id < 600) return '🌧';
+  if (id >= 600 && id < 700) return '❄️';
+  if (id >= 700 && id < 800) return '🌫';
+  if (id === 800) return '☀️';
+  if (id === 801) return '🌤';
+  if (id === 802) return '⛅';
+  if (id >= 803) return '☁️';
+  return '🌡';
+}
+
+async function loadForecast() {
+  const container = document.getElementById('forecast-days');
+  const note = document.getElementById('forecast-note');
+
+  if (!OWM_API_KEY || OWM_API_KEY === 'ВСТАВЬТЕ_ВАШ_КЛЮЧ_СЮДА') {
+    container.innerHTML = `<div class="forecast-error">⚠ Для отображения прогноза погоды укажите API-ключ OpenWeatherMap в переменной <strong>OWM_API_KEY</strong> в коде страницы. Получить бесплатно: <a href="https://openweathermap.org/api" target="_blank" style="color:var(--blue-light)">openweathermap.org</a></div>`;
+    return;
+  }
+
+  try {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(CITY)}&appid=${OWM_API_KEY}&units=metric&lang=${LANG}&cnt=56`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Ошибка API: ' + res.status);
+    const data = await res.json();
+
+    // Группируем по дням
+    const byDay = {};
+    data.list.forEach(item => {
+      const date = new Date(item.dt * 1000);
+      const key = date.toISOString().slice(0, 10);
+      if (!byDay[key]) byDay[key] = { temps: [], ids: [], descs: [], date };
+      byDay[key].temps.push(item.main.temp);
+      byDay[key].ids.push(item.weather[0].id);
+      byDay[key].descs.push(item.weather[0].description);
+    });
+
+    const days = Object.values(byDay).slice(0, 7);
+    const today = new Date().toISOString().slice(0, 10);
+
+    container.innerHTML = '';
+    days.forEach(day => {
+      const dateKey = day.date.toISOString().slice(0, 10);
+      const isToday = dateKey === today;
+      const maxT = Math.round(Math.max(...day.temps));
+      const minT = Math.round(Math.min(...day.temps));
+      // Берём погодный код середины дня (или последний доступный)
+      const midId = day.ids[Math.floor(day.ids.length / 2)];
+      const desc = day.descs[Math.floor(day.descs.length / 2)];
+      const dayName = isToday ? 'Сегодня' : DAY_NAMES[day.date.getDay()];
+      const dateStr = day.date.getDate() + ' ' + MONTH_NAMES[day.date.getMonth()];
+
+      const div = document.createElement('div');
+      div.className = 'forecast-day' + (isToday ? ' today' : '');
+      div.innerHTML = `
+        <div class="forecast-day-name">${dayName}</div>
+        <div class="forecast-day-date">${dateStr}</div>
+        <div class="forecast-icon">${weatherCodeToEmoji(midId)}</div>
+        <div class="forecast-temp-max">+${maxT}°</div>
+        <div class="forecast-temp-min">${minT > 0 ? '+' : ''}${minT}°</div>
+        <div class="forecast-desc">${desc}</div>
+      `;
+      container.appendChild(div);
+    });
+
+    note.textContent = 'Данные: OpenWeatherMap · обновлено ' + new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
+  } catch (e) {
+    container.innerHTML = `<div class="forecast-error">Не удалось загрузить прогноз: ${e.message}</div>`;
+  }
+}
+
+loadForecast();
+
+// ===== AFISHA LOADER =====
+// Данные вставляются скриптом inject_afisha.py прямо в HTML как window.AFISHA_DATA
+function loadAfisha() {
+  const grid = document.getElementById('afisha-grid');
+  const meta = document.getElementById('afisha-meta');
+
+  const data = window.AFISHA_DATA;
+
+  if (!data) {
+    meta.textContent = '';
+    grid.innerHTML = `
+      <div class="afisha-empty">
+        <div style="font-size:2rem;margin-bottom:12px">📋</div>
+        <strong style="color:rgba(255,255,255,0.6)">Данные афиши не загружены</strong><br><br>
+        Запустите скрипт обновления:<br>
+        <code style="background:rgba(255,255,255,0.08);padding:6px 12px;border-radius:6px;margin-top:8px;display:inline-block">python inject_afisha.py</code><br><br>
+        <span style="font-size:0.8rem">Скрипт спарсит афишу и вставит данные прямо в HTML-файл</span>
+      </div>`;
+    return;
+  }
+
+  if (data.updated_at) {
+    const d = new Date(data.updated_at);
+    meta.textContent = `Обновлено: ${d.toLocaleDateString('ru-RU', {day:'2-digit', month:'long', year:'numeric'})}  ·  Событий: ${data.count}`;
+  }
+
+  if (!data.events || data.events.length === 0) {
+    grid.innerHTML = '<div class="afisha-empty">События не найдены. Запустите <code>inject_afisha.py</code> для обновления.</div>';
+    return;
+  }
+
+  grid.innerHTML = '';
+  data.events.forEach(ev => {
+    const card = document.createElement('a');
+    card.className = 'afisha-card';
+    card.href = ev.url || '#';
+    card.target = '_blank';
+    card.rel = 'noopener';
+
+    const imgHtml = ev.image
+      ? `<img class="afisha-card-img" src="${ev.image}" alt="${ev.title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        + `<div class="afisha-card-img-placeholder" style="display:none">🎭</div>`
+      : `<div class="afisha-card-img-placeholder">🎭</div>`;
+
+    const dateHtml = ev.date_raw
+      ? `<div class="afisha-card-date">📅 ${ev.date_raw}</div>` : '';
+    const venueHtml = ev.venue
+      ? `<div class="afisha-card-venue">📍 ${ev.venue}</div>` : '';
+    const descHtml = ev.description
+      ? `<div class="afisha-card-desc">${ev.description}</div>` : '';
+
+    card.innerHTML = `
+      ${imgHtml}
+      <div class="afisha-card-body">
+        ${dateHtml}
+        <div class="afisha-card-title">${ev.title}</div>
+        ${venueHtml}
+        ${descHtml}
+        <span class="afisha-card-link">Подробнее →</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* AFISHA_DATA_START */
+window.AFISHA_DATA = {
+  "updated_at": "2026-05-26T17:17:46",
+  "source": "https://www.pyatigorsk.online/poster/",
+  "count": 54,
+  "events": [
+    {
+      "title": "«Мастерская Гитарного Искусства»",
+      "url": "https://www.pyatigorsk.online/poster/«masterskaya_gitarnogo_iskusstva»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1011.jpg?csh=1779805067",
+      "date_raw": "23.05.26-28.05.26 / 00:00",
+      "venue": "Пятигорск, ул. Сельская, 40 С 23 по 28 мая 2026 года в городе-курорте благодаря гранту Президентского фонда культурных и",
+      "description": ""
+    },
+    {
+      "title": "Курортные вечера",
+      "url": "https://www.pyatigorsk.online/poster/kurortnyie_vechera/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1064.jpg?csh=1779805067",
+      "date_raw": "26.05.26 / 17:00",
+      "venue": "парк \"Цветник\" Друзья, программа «Курортных вечеров» на текущую неделю. В случае дождя мероприятия не проводятся.",
+      "description": ""
+    },
+    {
+      "title": "Афиша на МАЙ 2026 Театр оперетты",
+      "url": "https://www.pyatigorsk.online/poster/afisha_na_may_2026_teatr_operettyi_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1050.jpg?csh=1779805067",
+      "date_raw": "02.05.26-30.05.26 / 19:00",
+      "venue": "ГБУК СК \"Театр Оперетты\", г. Пятигорск, просп. Кирова, 17",
+      "description": ""
+    },
+    {
+      "title": "ПЕРСОНАЛЬНАЯ ВЫСТАВКА ХУДОЖНИКА ИГОРЯ ХОРОНЬКО «ПАМЯТЬ, НАПИСАННАЯ КИСТЬЮ»",
+      "url": "https://www.pyatigorsk.online/poster/personal_naya_vyistavka_hudojnika_igorya_horon_ko_«pamyat_napisannaya_kist_yu»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1056.jpg?csh=1779805067",
+      "date_raw": "06.05.26-30.05.26 / 19:00",
+      "venue": "",
+      "description": ""
+    },
+    {
+      "title": "Концертная программа Павла Кухты",
+      "url": "https://www.pyatigorsk.online/poster/kontsertnaya_programma_pavla_kuhtyi_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1060.jpg?csh=1779805067",
+      "date_raw": "26.05.26 / 19:00",
+      "venue": "ГБУК СК \"Театр Оперетты\", г. Пятигорск, просп. Кирова, 17 Павел Кухта — солист Минской государственной филармонии, лауре",
+      "description": ""
+    },
+    {
+      "title": "Расписание Пятигорского кинотеатра под открытым небом",
+      "url": "https://www.pyatigorsk.online/poster/raspisanie_pyatigorskogo_kinoteatra_pod_otkryityim_nebom_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1065.jpg?csh=1779805067",
+      "date_raw": "26.05.26-31.05.26 / 19:00",
+      "venue": "На нижней площадке, около скульптуры Орла Расписание сеансов в кинотеатре под открытым небом с 26.05.2026 г. по 31.05.20",
+      "description": ""
+    },
+    {
+      "title": "Фестиваль короткометражного кино «Green Screen»",
+      "url": "https://www.pyatigorsk.online/poster/festival_korotkometrajnogo_kino_«green_screen»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_838.jpg?csh=1779805067",
+      "date_raw": "17.06.23 / 17:00",
+      "venue": "г. Пятигорск, Комсомольский парк, Аллея славы Лучшие работы покажут 17 июня на большом экране в Комсомольском парке.",
+      "description": ""
+    },
+    {
+      "title": "День народного единства",
+      "url": "https://www.pyatigorsk.online/poster/den_narodnogo_edinstva/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_864.jpg?csh=1779805067",
+      "date_raw": "04.11.23 / 10:00",
+      "venue": "г. Пятигорск, городская площадь у здания администрации города Программа мероприятий в День народного единства в Пятигорс",
+      "description": ""
+    },
+    {
+      "title": "ФЕСТИВАЛЬ ПЕЙНБОЛА",
+      "url": "https://www.pyatigorsk.online/poster/festival_peynbola_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_865.jpg?csh=1779805067",
+      "date_raw": "25.11.23 / 10:00",
+      "venue": "Территория Конно-спортивного комплекса ГСКО, г. Пятигорск, ул. Луначарского, 69А Приглашаются игроки на фестиваль пейнтб",
+      "description": ""
+    },
+    {
+      "title": "ВЫСТАВКА «ЯПОНСКОЕ ИСКУССТВО»",
+      "url": "https://www.pyatigorsk.online/poster/vyistavka_«yaponskoe_iskusstvo»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_745.jpg?csh=1779805067",
+      "date_raw": "01.12.22-25.01.23 / 09:00",
+      "venue": "Пятигорский Краеведческий Музей, г. Пятигорск, ул. Братьев Бернардацци, дом 2 В музее открылась выставка «Японское искус",
+      "description": ""
+    },
+    {
+      "title": "выставка «Расскажи мне сказку...»",
+      "url": "https://www.pyatigorsk.online/poster/_vyistavka_«rasskaji_mne_skazku_»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_748.jpg?csh=1779805067",
+      "date_raw": "19.01.23-11.02.23 / 12:00",
+      "venue": "МВК \"Моя страна. Моя история\", г. Пятигорск, ул. Кооперативная, 42, р-н Новопятигорского озера, Парк Победы Соскучились ",
+      "description": ""
+    },
+    {
+      "title": "Выставка «Сталинград – история Победы»",
+      "url": "https://www.pyatigorsk.online/poster/vyistavka_«stalingrad_–_istoriya_pobedyi»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_759.jpg?csh=1779805067",
+      "date_raw": "02.02.23-02.03.23 / 11:00",
+      "venue": "МВК \"Моя страна. Моя история\", г. Пятигорск, ул. Кооперативная, 42, р-н Новопятигорского озера, Парк Победы В Пятигорско",
+      "description": ""
+    },
+    {
+      "title": "Открытие выставки посвященной Дню защитника Отечества, «Отечество-2023»",
+      "url": "https://www.pyatigorsk.online/poster/otkryitie_vyistavki_posvyaschennoy_dnyu_zaschitnika_otechestva_«otechestvo-2023»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_774.jpg?csh=1779805067",
+      "date_raw": "18.02.23-26.02.23 / 12:00",
+      "venue": "МВК \"Моя страна. Моя история\", г. Пятигорск, ул. Кооперативная, 42, р-н Новопятигорского озера, Парк Победы Вв нашем ист",
+      "description": ""
+    },
+    {
+      "title": "Выставка «Вдохновение длиною в жизнь»",
+      "url": "https://www.pyatigorsk.online/poster/vyistavka_«vdohnovenie_dlinoyu_v_jizn_»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_784.jpg?csh=1779805067",
+      "date_raw": "03.03.23-26.03.23 / 13:00",
+      "venue": "Пятигорский краеведческий музей, г. Пятигорск, просп. Кирова, 25 3 марта 2023 года в 13 часов в Пятигорском краеведческо",
+      "description": ""
+    },
+    {
+      "title": "ПЕРЕДВИЖНАЯ ИММЕРСИВНАЯ ЭКСПОЗИЦИЯ - МУЗЕЙ «ПОЕЗД ПОБЕДЫ»(6+)",
+      "url": "https://www.pyatigorsk.online/poster/peredvijnaya_immersivnaya_ekspozitsiya_-_muzey_«poezd_pobedyi»_6_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_707.jpg?csh=1779805067",
+      "date_raw": "09.03.23-10.03.23 / 10:00",
+      "venue": "г. Пятигорск, железнодорожный вокзал «Поезд Победы» - это первая в мире иммерсивная инсталляция, размещенная в движущемс",
+      "description": ""
+    },
+    {
+      "title": "Чемпионат и Первенство Ставропольского края по кинологическому спорту пройдут в Пятигорске",
+      "url": "https://www.pyatigorsk.online/poster/chempionat_i_pervenstvo_stavropol_skogo_kraya_po_kinologicheskomu_sportu_proydut_v_pyatigorske_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_776.jpg?csh=1779805067",
+      "date_raw": "18.03.23-19.03.23 / 10:00",
+      "venue": "гора Машук, место дуэли Лермонтова В ближайшие выходные, 18 и 19 марта соревнования соберут у подножия Машука молодых сп",
+      "description": ""
+    },
+    {
+      "title": "Вертикальный забег  «Машук 993»",
+      "url": "https://www.pyatigorsk.online/poster/vertikal_nyiy_zabeg_«mashuk_993»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_798.jpg?csh=1779805067",
+      "date_raw": "22.04.23-23.04.23 / 08:00",
+      "venue": "г. Пятигорск, парк «Цветник» Пятигорский полумарафон - красивейший асфальтовый забег с уникальным горным маршрутом и ист",
+      "description": ""
+    },
+    {
+      "title": "Чемпионат и Первенство города по ездовому спорту (кросс-1 собака)",
+      "url": "https://www.pyatigorsk.online/poster/_chempionat_i_pervenstvo_goroda_po_ezdovomu_sportu_kross-1_sobaka_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_806.jpg?csh=1779805067",
+      "date_raw": "14.05.23 / 08:00",
+      "venue": "г. Пятигорск, гора Машук, район \"Места дуэли М.Ю. Лермонтова\" Приглашаем спортсменов и любителей отлично провести время ",
+      "description": ""
+    },
+    {
+      "title": "МУЖСКОЙ ДЕНЬ НА КМВ",
+      "url": "https://www.pyatigorsk.online/poster/mujskoy_den_na_kmv_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_815.jpg?csh=1779805067",
+      "date_raw": "21.05.23 / 13:00",
+      "venue": "г. Пятигорск | на Капище возле реки Подкумок В программе МОЛОДЕЦКИЕ ЗАБАВЫ! Представляют из себя комплекс мужских игр, р",
+      "description": ""
+    },
+    {
+      "title": "II Всероссийская массовая велосипедная гонка «Всемирный день велосипедиста 2023»",
+      "url": "https://www.pyatigorsk.online/poster/ii_vserossiyskaya_massovaya_velosipednaya_gonka_«vsemirnyiy_den_velosipedista_2023»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_822.jpg?csh=1779805067",
+      "date_raw": "03.06.23 / 10:00",
+      "venue": "г. Пятигорск, Гора Машук, место дуэли М.Ю. Лермонтова Приглашают принять участие в соревнованиях. Приходите поддержать г",
+      "description": ""
+    },
+    {
+      "title": "kavkaz-run: \"SWIMRUN\" 2023",
+      "url": "https://www.pyatigorsk.online/poster/kavkaz-run_swimrun_2023/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_649.jpg?csh=1779805067",
+      "date_raw": "17.06.23-18.06.23 / 08:00",
+      "venue": "г. Пятигорск, парк \"Победы\" 17-18 июня нас ждет самое спортивное событие серии - Фестиваля цикличеких видов спорта \"SWIM",
+      "description": ""
+    },
+    {
+      "title": "Афиша на ИЮНЬ 2026",
+      "url": "https://www.pyatigorsk.online/poster/afisha_na_iyun_2026_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1055.jpg?csh=1779805067",
+      "date_raw": "01.06.26-27.06.26 / 11:00",
+      "venue": "",
+      "description": ""
+    },
+    {
+      "title": "РЕПЕРТУАР ДЕТСКОГО КУКОЛЬНОГО ТЕАТРА \"ЗОЛОТОЙ КЛЮЧИК\"",
+      "url": "https://www.pyatigorsk.online/poster/repertuar_detskogo_kukol_nogo_teatra_zolotoy_klyuchik_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1062.jpg?csh=1779805067",
+      "date_raw": "06.06.26 / 17:00",
+      "venue": "",
+      "description": ""
+    },
+    {
+      "title": "СПЕКТАКЛЬ «СОБАЧЬЕ СЕРДЦЕ»(12+)",
+      "url": "https://www.pyatigorsk.online/poster/spektakl_«sobach_e_serdtse»_12_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_763.jpg?csh=1779805067",
+      "date_raw": "05.02.23 / 19:00",
+      "venue": "ГБУК СК \"Театр Оперетты\", г. Пятигорск, просп. Кирова, 17 Театр порадует своих поклонников премьерой спектакля «Собачье ",
+      "description": ""
+    },
+    {
+      "title": "СПЕКТАКЛЬ \"ПРЕЛЕСТИ ИЗМЕНЫ\"(12+",
+      "url": "https://www.pyatigorsk.online/poster/spektakl_prelesti_izmenyi_12_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_743.jpg?csh=1779805067",
+      "date_raw": "07.02.23 / 19:00",
+      "venue": "ГБУК СК \"Театр Оперетты\", г. Пятигорск, просп. Кирова, 17 Комедия «Прелести измены» держит зрителей в постоянном напряже",
+      "description": ""
+    },
+    {
+      "title": "БОЛЬШИЕ ГАСТРОЛИ МХАТ ИМ. М.ГОРЬКОГО Г.МОСКВА на КМВ",
+      "url": "https://www.pyatigorsk.online/poster/bol_shie_gastroli_mhat_im_m_gor_kogo_g_moskva_na_kmv_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_765.jpg?csh=1779805067",
+      "date_raw": "11.02.23 / 19:00",
+      "venue": "ГДК им. С. Пускепалиса, г. Железноводск, ул. Чайковского, 1 Театральный сезон февраля насыщен событиями. Ждём вас во Дво",
+      "description": ""
+    },
+    {
+      "title": "СПЕКТАКЛЬ \"СЛУЧАЙНОЕ ТАНГО\"(16+)",
+      "url": "https://www.pyatigorsk.online/poster/spektakl_sluchaynoe_tango_16_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_757.jpg?csh=1779805067",
+      "date_raw": "14.02.23 / 19:00",
+      "venue": "ГБУК СК \"Театр Оперетты\", г. Пятигорск, просп. Кирова, 17 Приглашаем на захватывающий спектакль по пьесе Виктора Аима.",
+      "description": ""
+    },
+    {
+      "title": "ТОРЖЕСТВЕННОЕ ЗАКРЫТИЕ СЕЗОНА В ПЯТИГОРСКОМ ТЮЗЕ",
+      "url": "https://www.pyatigorsk.online/poster/torjestvennoe_zakryitie_sezona_v_pyatigorskom_tyuze_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1061.jpg?csh=1779805068",
+      "date_raw": "28.05.26 / 18:00",
+      "venue": "ГДК №1 им. А.Д. Дементьева, проспект 40 лет Октября, 10 Кажется, только вчера мы открывали 13‑й сезон, а уже пришло врем",
+      "description": ""
+    },
+    {
+      "title": "Афиша праздничных мероприятий",
+      "url": "https://www.pyatigorsk.online/poster/afisha_prazdnichnyih_meropriyatiy_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_808.jpg?csh=1779805068",
+      "date_raw": "04.05.23-09.05.23 / 10:00",
+      "venue": "г. Пятигорск Афиша основных мероприятий, посвящённых Дню Победы в Великой Отечественной войне.",
+      "description": ""
+    },
+    {
+      "title": "«ИСТОРИЯ И ИСТОРИИ ПЯТИГОРСКОГО КРАЕВЕДЧЕСКОГО МУЗЕЯ»",
+      "url": "https://www.pyatigorsk.online/poster/«istoriya_i_istorii_pyatigorskogo_kraevedcheskogo_muzeya»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_814.jpg?csh=1779805068",
+      "date_raw": "20.05.23 / 18:00",
+      "venue": "г. Пятигорск, ул. Братьев Бернардацци, дом 2 В 2023 году музей приготовил культурно-просветительную программу, посвященн",
+      "description": ""
+    },
+    {
+      "title": "ОТКРЫТИЕ КУПАЛЬНОГО СЕЗОНА 2023",
+      "url": "https://www.pyatigorsk.online/poster/otkryitie_kupal_nogo_sezona_2023_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_831.jpg?csh=1779805068",
+      "date_raw": "17.06.23 / 12:00",
+      "venue": "г. Пятигорск, Новопятигорское озеро Открываем купальный сезон в Пятигорске!",
+      "description": ""
+    },
+    {
+      "title": "открытие Курортного сезона-2023",
+      "url": "https://www.pyatigorsk.online/poster/_otkryitie_kurortnogo_sezona-2023/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_835.jpg?csh=1779805068",
+      "date_raw": "17.06.23 / 17:00",
+      "venue": "г. Пятигорск, парк Цветник Приглашаем всех пятигорчан и гостей города 17 июня в 17:00 в парк Цветник.",
+      "description": ""
+    },
+    {
+      "title": "ХОРЕОГРАФИЧЕСКИЙ АНСАМБЛЬ \"ДЕГАЖЕ\" С КОНЦЕРТОМ \"ЧЕРЕЗ ТЕРНИИ К ЗВЕЗДАМ...\" (0+)",
+      "url": "https://www.pyatigorsk.online/poster/horeograficheskiy_ansambl_degaje_s_kontsertom_cherez_ternii_k_zvezdam_0_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1063.jpg?csh=1779805068",
+      "date_raw": "31.05.26 / 17:00",
+      "venue": "",
+      "description": ""
+    },
+    {
+      "title": "КОНЦЕРТНАЯ ПРОГРАММА \"МЕДАЛЬОНЫ\"",
+      "url": "https://www.pyatigorsk.online/poster/kontsertnaya_programma_medal_onyi_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_744.jpg?csh=1779805068",
+      "date_raw": "14.01.23 / 19:00",
+      "venue": "г. Пятигорск, ул. Октябрьская, 10/ ул. Крайнего, 47 (зал бывш. кафе \"Лисья Нора\") Не упустите возможности совершить увле",
+      "description": ""
+    },
+    {
+      "title": "МУЗЫКАЛЬНЫЙ ВЕЧЕР - РОК-ГРУППА \"ZЕЛЁНЫЙ GОРОШЕК\"",
+      "url": "https://www.pyatigorsk.online/poster/muzyikal_nyiy_vecher_-_rok-gruppa_zelenyiy_goroshek_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_746.jpg?csh=1779805068",
+      "date_raw": "21.01.23 / 19:00",
+      "venue": "г. Пятигорск, ул. Октябрьская, 10 Представляем вашему вниманию группу образовавшуюся в 2007 году, как корпоративная само",
+      "description": ""
+    },
+    {
+      "title": "ТЕАТРАЛЬНО-МУЗЫКАЛЬНАЯ ГОСТИНАЯ \"ВЕНСКИЕ ВСТРЕЧИ\"(12+)",
+      "url": "https://www.pyatigorsk.online/poster/teatral_no-muzyikal_naya_gostinaya_venskie_vstrechi_12_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_749.jpg?csh=1779805068",
+      "date_raw": "24.01.23 / 15:00",
+      "venue": "ГБУК СК \"Театр Оперетты\", г. Пятигорск, просп. Кирова, 17 Новая музыкальная программа в рамках проекта «Пушкинская карта",
+      "description": ""
+    },
+    {
+      "title": "СПЕКТАКЛЬ \"КАВКАЗСКИЙ ЩЕРБЕТ\"(12+)",
+      "url": "https://www.pyatigorsk.online/poster/spektakl_kavkazskiy_scherbet_12_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_751.jpg?csh=1779805068",
+      "date_raw": "29.01.23 / 18:00",
+      "venue": "Пятигорск, улица Орджоникидзе 11 А, ресторан \"Хантама\" Театр Лейлы Голициной предлагает Вашему вниманию лучшие театральн",
+      "description": ""
+    },
+    {
+      "title": "СПЕКТАКЛЬ «ПРИЗНАНИЕ»(12+)",
+      "url": "https://www.pyatigorsk.online/poster/spektakl_«priznanie»_12_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_742.jpg?csh=1779805068",
+      "date_raw": "31.01.23 / 19:00",
+      "venue": "ГБУК СК \"Театр Оперетты\", г. Пятигорск, просп. Кирова, 17 Музыкально-драматический спектакль «Признание» это история чел",
+      "description": ""
+    },
+    {
+      "title": "\"Жемчужины русской музыки\"",
+      "url": "https://www.pyatigorsk.online/poster/_jemchujinyi_russkoy_muzyiki_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_987.jpg?csh=1779805068",
+      "date_raw": "21.11.25 / 19:00",
+      "venue": "Театр оперетты  Пятигорск 21 ноября Театр Оперетты приглашает вас на концерт русской классической вокальной музыки в исп",
+      "description": ""
+    },
+    {
+      "title": "МУЗЕЙНАЯ ЛИТЕРАТУРНО-МУЗЫКАЛЬНАЯ ПРОГРАММА «СИМФОНИЯ НАРОДОВ КАВКАЗА» (6+)",
+      "url": "https://www.pyatigorsk.online/poster/muzeynaya_literaturno-muzyikal_naya_programma_«simfoniya_narodov_kavkaza»_6_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1012.jpg?csh=1779805068",
+      "date_raw": "29.01.26 / 15:00",
+      "venue": "Пятигорский краеведческий музей, г. Пятигорск, ул. Братьев Бернардацци, дом 2 В Пятигорском краеведческом музее состоитс",
+      "description": ""
+    },
+    {
+      "title": "театрально движенческая практика с Арина Мур",
+      "url": "https://www.pyatigorsk.online/poster/teatral_no_dvijencheskaya_praktika_s_arina_mur_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_767.jpg?csh=1779805068",
+      "date_raw": "11.02.23 / 17:00",
+      "venue": "г. Пятигорск, Бештаугорское шоссе, 22 Приглашаем 11 февраля на настоящий музыкально - танцевальный экспериментальный про",
+      "description": ""
+    },
+    {
+      "title": "\"Разноцветные страницы\" открытие выставки работ и мастер-класс художника-иллюстратора Натальи Леоновой",
+      "url": "https://www.pyatigorsk.online/poster/_raznotsvetnyie_stranitsyi_otkryitie_vyistavki_rabot_i_master-klass_hudojnika-illyustratora_natal_i_leonovoy/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_975.jpg?csh=1779805068",
+      "date_raw": "10.09.25-13.09.25 / 11:00",
+      "venue": "Библиотека им. М. Горького Работы Натальи выполняются обычно в смешанной технике на основе пастели. Автор не боится эксп",
+      "description": ""
+    },
+    {
+      "title": "«Лекция выходного дня»",
+      "url": "https://www.pyatigorsk.online/poster/«lektsiya_vyihodnogo_dnya»/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_1004.jpg?csh=1779805068",
+      "date_raw": "24.01.26 / 15:00",
+      "venue": "Пятигорский краеведческий музей, г. Пятигорск, ул. Братьев Бернардацци, дом 2 ЛЕКЦИЯ «КАВМИНВОДЫ КАК УНИКАЛЬНОЕ ИСТОРИКО",
+      "description": ""
+    },
+    {
+      "title": "НОЧЬ МУЗЕЕв - 2023 Государственный музей-заповедник М.Ю. Лермонтова",
+      "url": "https://www.pyatigorsk.online/poster/noch_muzeev_-_2023_gosudarstvennyiy_muzey-zapovednik_m_yu_lermontova/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_631.jpg?csh=1779805068",
+      "date_raw": "20.05.23 / 18:00",
+      "venue": "Государственный музей-заповедник М.Ю. Лермонтова, г. Пятигорск, ул. Лермонтова, 4 Музей-заповедник М.Ю. Лермонтова тради",
+      "description": ""
+    },
+    {
+      "title": "Государственный музей-заповедник М.Ю. Лермонтова: Афиша на март",
+      "url": "https://www.pyatigorsk.online/poster/gosudarstvennyiy_muzey-zapovednik_m_yu_lermontova_afisha_na_mart_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_700.jpg?csh=1779805068",
+      "date_raw": "01.03.24-31.03.24 / 11:00",
+      "venue": "",
+      "description": ""
+    },
+    {
+      "title": "АФИША МЕРОПРИЯТИЙ на июнь 2025 года",
+      "url": "https://www.pyatigorsk.online/poster/afisha_meropriyatiy_na_iyun_2025_goda/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_908.jpg?csh=1779805068",
+      "date_raw": "01.06.25-30.06.25 / 12:00",
+      "venue": "",
+      "description": ""
+    },
+    {
+      "title": "Литературно-музыкальная программа посвященная дню рождения А.С. Пушкина",
+      "url": "https://www.pyatigorsk.online/poster/literaturno-muzyikal_naya_programma_posvyaschennaya_dnyu_rojdeniya_a_s_pushkina/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_906.jpg?csh=1779805068",
+      "date_raw": "06.06.25 / 16:00",
+      "venue": "Дом А.А. Алябьева, ул.Буачидзе, 1 Музей-заповедник М.Ю. Лермонтова приглашает на литературно-музыкальную программу посвя",
+      "description": ""
+    },
+    {
+      "title": "В домике Лермонтова пройдет День открытых дверей",
+      "url": "https://www.pyatigorsk.online/poster/v_domike_lermontova_proydet_den_otkryityih_dverey_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_982.jpg?csh=1779805068",
+      "date_raw": "15.10.25 / 10:00",
+      "venue": "Государственный музей-заповедник М. Ю. Лермонтова День открытых дверей проведут в пятигорском Домике Лермонтова в день р",
+      "description": ""
+    },
+    {
+      "title": "Студенческий вечер на льду",
+      "url": "https://www.pyatigorsk.online/poster/studencheskiy_vecher_na_l_du_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_752.jpg?csh=1779805068",
+      "date_raw": "25.01.23 / 18:00",
+      "venue": "Парк культуры и отдыха им Кирова, г. Пятигорск, ул. Дунаевского, 5 В программе интерактив, зажигательные танцы, беспроиг",
+      "description": ""
+    },
+    {
+      "title": "ТЕАТРАЛЬНОЕ ПРЕДСТАВЛЕНИЕ «С ЛЮБОВЬ К ВАМ…»",
+      "url": "https://www.pyatigorsk.online/poster/teatral_noe_predstavlenie_«s_lyubov_k_vam…»_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_750.jpg?csh=1779805068",
+      "date_raw": "26.01.23 / 16:00",
+      "venue": "«Дом композитора А.А. Алябьева», г. Пятигорск, ул. Буачидзе, 1 Друзья, 26 января в 16:00 приглашаем вас на театральное п",
+      "description": ""
+    },
+    {
+      "title": "Цирк-шапито \"Белиссимо\"",
+      "url": "https://www.pyatigorsk.online/poster/tsirk-shapito_belissimo_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_758.jpg?csh=1779805068",
+      "date_raw": "28.01.23-12.02.23 / 12:00",
+      "venue": "парковка ТРЦ \"Вершина Plaza\", г. Пятигорск, ул. Ессентукская, 31А Вас ждут невероятно очаровательные дрессированные обез",
+      "description": ""
+    },
+    {
+      "title": "Уникальное квест-шоу Форт Боярд в КМВ",
+      "url": "https://www.pyatigorsk.online/poster/unikal_noe_kvest-shou_fort_boyard_v_kmv_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_762.jpg?csh=1779805068",
+      "date_raw": "02.02.23-31.12.23 / 11:00",
+      "venue": "г. Пятигорск, ул. Захарова, д.14б Форт Боярд в Пятигорске - это уникальный квест по мотивам всемирно известного телешоу!",
+      "description": ""
+    },
+    {
+      "title": "КОНЦЕРТ В ЧЕСТЬ ДНЯ РОЖДЕНИЯ БОБА",
+      "url": "https://www.pyatigorsk.online/poster/kontsert_v_chest_dnya_rojdeniya_boba_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_760.jpg?csh=1779805068",
+      "date_raw": "04.02.23 / 19:00",
+      "venue": "г. Пятигорск, ул. Октябрьская, 10 Мы приглашаем всех ценителей позитивного звучания на ежегодный традиционный вечер в че",
+      "description": ""
+    },
+    {
+      "title": "Жизнь и творчество В. М. Шукшина",
+      "url": "https://www.pyatigorsk.online/poster/jizn_i_tvorchestvo_v_m_shukshina_/",
+      "image": "https://www.pyatigorsk.online/getimg/585/400/fill/content/afisha/image_764.jpg?csh=1779805068",
+      "date_raw": "09.02.23 / 12:00",
+      "venue": "г. Пятигорск, ул. Кочубея, д. 21 «Жизнь и творчество В. М. Шукшина» – устный журнал под таким названием состоится 9 февр",
+      "description": ""
+    }
+  ]
+};
+/* AFISHA_DATA_END */
+
+// ===== SANATORIA =====
+// ===== ПОКАЗАНИЯ — ЧИПЫ ПОДБОРЩИКА =====
+const conditions = [
+  { id: "heart",      icon: "🫀", label: "Сердце и сосуды" },
+  { id: "breath",     icon: "🫁", label: "Органы дыхания" },
+  { id: "gut",        icon: "🥗", label: "ЖКТ и печень" },
+  { id: "diabetes",   icon: "🩸", label: "Диабет / обмен веществ" },
+  { id: "joints",     icon: "🦴", label: "Суставы и позвоночник" },
+  { id: "kidneys",    icon: "💧", label: "Почки и урология" },
+  { id: "skin",       icon: "🌿", label: "Кожные заболевания" },
+  { id: "gynecology", icon: "🌸", label: "Гинекология" },
+  { id: "nervous",    icon: "🧠", label: "Нервная система" },
+  { id: "family",     icon: "👨‍👩‍👧", label: "Семейный отдых" },
+  { id: "budget",     icon: "💰", label: "Доступная цена" },
+  { id: "luxury",     icon: "✨", label: "Премиум / люкс" },
+];
+
+const sanatoria = [
+  {
+    num: 1, img: "piket.jpg",
+    name: "Санаторий «Пикет»",
+    city: "Кисловодск", stars: 5,
+    desc: "Один из лучших санаториев КМВ класса «люкс». Расположен в 3 минутах от Нарзанной галереи. Собственная лечебная база, бассейн, СПА, авторская кухня.",
+    full: `<p>Санаторий «Пикет» — флагман лечебного туризма Кисловодска, неизменно входящий в рейтинги лучших здравниц России. Комплекс расположен в историческом центре курорта, в 3 минутах пешком от Нарзанной галереи и в шаговой доступности от входа в национальный парк.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны всех видов, ингаляционный зал, физиотерапия, ЛФК, массаж, криотерапия, иглорефлексотерапия. Собственный крытый бассейн с минеральной водой.</p>
+    <p><strong>Проживание и питание:</strong> номера стандарт, люкс и апартаменты. Ресторан с авторской кавказской кухней, диетическое меню по показаниям. СПА-зона с сауной и хаммамом.</p>
+    <p><strong>Профиль:</strong> сердечно-сосудистые заболевания, болезни органов дыхания, нервной системы, нарушения обмена веществ. Курс от 10 дней.</p>`,
+    tags: ["Бассейн", "СПА", "Нарзан", "Кардиология", "Пульмонология"],
+    price: "от 9 500 ₽/сут",
+    lat: 43.9072, lng: 42.7211,
+    addr: "Кисловодск, ул. Вокзальная, 20",
+    conditions: ["heart", "breath", "nervous", "luxury"],
+  },
+  {
+    num: 2, img: "narzan.jpg",
+    name: "Санаторий «Нарзан»",
+    city: "Кисловодск", stars: 4,
+    desc: "Классический санаторий в центре Кисловодска у Курортного парка. Нарзанные ванны, грязелечение, бювет на территории. Профиль — сердце и сосуды.",
+    full: `<p>Санаторий «Нарзан» — один из старейших и наиболее уважаемых санаториев Кисловодска. Расположен в непосредственной близости от входа в Курортный парк — терренкурные прогулки доступны прямо от корпуса.</p>
+    <p><strong>Лечебная база:</strong> полный спектр нарзанных ванн, грязелечение тамбуканской грязью, ингаляции, физиотерапия, ЭКГ и кардиомониторирование, ЛФК, массаж. Питьевой бювет с нарзаном на территории.</p>
+    <p><strong>Профиль:</strong> кардиология, гипертония, ишемическая болезнь сердца, атеросклероз, вегетативная дисфункция. Врачи-кардиологи высшей категории. Программы от 7 дней.</p>`,
+    tags: ["Нарзанные ванны", "Грязелечение", "Парк рядом", "Кардиология"],
+    price: "от 5 200 ₽/сут",
+    lat: 43.9040, lng: 42.7230,
+    addr: "Кисловодск, пр. Дзержинского, 1",
+    conditions: ["heart", "breath", "nervous"],
+  },
+  {
+    num: 3, img: "plaza.jpg",
+    name: "Санаторий «Плаза»",
+    city: "Кисловодск", stars: 5,
+    desc: "Современный 5-звёздочный отель-санаторий в центре Кисловодска. Европейский уровень, панорамный ресторан, крытый бассейн.",
+    full: `<p>«Плаза» — самый современный санаторий Кисловодска, сочетающий стандарты пятизвёздочного отеля с полноценной лечебной программой.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны, подводный душ-массаж, магнитотерапия, лазеротерапия, криотерапия, аромафитотерапия, ЛФК в бассейне с подогревом.</p>
+    <p><strong>Проживание:</strong> номера Superior, Deluxe, Junior Suite и Suite. Два ресторана, лобби-бар, конференц-зал. СПА с финской сауной и турецкой баней.</p>
+    <p><strong>Профиль:</strong> кардиология, пульмонология, нервная система, реабилитация после операций на сердце. Индивидуальные программы от 5 дней.</p>`,
+    tags: ["5 звёзд", "Бассейн", "Ресторан", "Нарзан", "Люкс"],
+    price: "от 12 000 ₽/сут",
+    lat: 43.9065, lng: 42.7198,
+    addr: "Кисловодск, пр. Ленина, 6",
+    conditions: ["heart", "breath", "nervous", "luxury"],
+  },
+  {
+    num: 4, img: "don.jpg",
+    name: "Санаторий «Дон»",
+    city: "Пятигорск", stars: 4,
+    desc: "Крупный многопрофильный санаторий у подножия горы Машук. Радоновые ванны — главная специализация. Ортопедия, дерматология, гинекология.",
+    full: `<p>Санаторий «Дон» — один из ведущих радоновых санаториев России у подножия горы Машук. Уникальность — наличие собственных природных радоновых источников.</p>
+    <p><strong>Лечебная база:</strong> радоновые ванны (природный радон), сероводородные ванны, грязелечение, гинекологические орошения, физиотерапия, лазеротерапия, массаж, ЛФК.</p>
+    <p><strong>Профиль:</strong> заболевания опорно-двигательного аппарата (артрит, артроз, остеохондроз), кожные болезни (псориаз, экзема), гинекологические заболевания, периферическая нервная система.</p>`,
+    tags: ["Радоновые ванны", "Гора Машук", "Ортопедия", "Гинекология", "Дерматология"],
+    price: "от 5 800 ₽/сут",
+    lat: 44.0452, lng: 43.0685,
+    addr: "Пятигорск, ул. Теплосерная, 2",
+    conditions: ["joints", "skin", "gynecology", "nervous"],
+  },
+  {
+    num: 5, img: "mashuk.jpg",
+    name: "Санаторий «Машук Аква-Терм»",
+    city: "Пятигорск", stars: 4,
+    desc: "Крупнейший санаторий Пятигорска с термальным аквапарком. Идеален для семейного отдыха с лечением.",
+    full: `<p>«Машук Аква-Терм» — уникальный комплекс, объединяющий полноценный санаторий с одним из лучших термальных аквапарков Северного Кавказа. Особенно привлекателен для семей с детьми.</p>
+    <p><strong>Аквапарк:</strong> 6 бассейнов с термальной минеральной водой (36–40°C), водные горки, джакузи, детский бассейн. Работает круглый год.</p>
+    <p><strong>Лечебная база:</strong> радоновые и сероводородные ванны, грязевые аппликации, физиотерапия, ЛФК, массаж, питьевые курсы минеральной воды.</p>
+    <p><strong>Профиль:</strong> заболевания ЖКТ, опорно-двигательного аппарата, кожные болезни. Семейные программы, детская анимация.</p>`,
+    tags: ["Аквапарк", "Термальный бассейн", "Семейный", "Радон", "ЖКТ"],
+    price: "от 6 400 ₽/сут",
+    lat: 44.0487, lng: 43.0621,
+    addr: "Пятигорск, ул. Горячеводская, 2",
+    conditions: ["gut", "joints", "skin", "family"],
+  },
+  {
+    num: 6, img: "rus.jpg",
+    name: "Санаторий «Русь»",
+    city: "Ессентуки", stars: 4,
+    desc: "Ведущий санаторий Ессентуков в Курортном парке. Специализируется на лечении ЖКТ, печени, диабета с использованием ессентукских вод.",
+    full: `<p>Санаторий «Русь» — один из ведущих гастроэнтерологических санаториев России у входа в Курортный парк Ессентуков. Прямой доступ к питьевым галереям с источниками №4 и №17.</p>
+    <p><strong>Питьевой курс:</strong> назначается индивидуально — вид воды, температура, доза, время приёма. Источники в 5 минутах ходьбы от корпуса.</p>
+    <p><strong>Лечебная база:</strong> грязелечение (тамбуканская грязь), дуоденальное зондирование, физиотерапия, ультразвук, лазер. Консультации гастроэнтеролога, гепатолога, эндокринолога.</p>
+    <p><strong>Профиль:</strong> хронические гастриты, язвенная болезнь (ремиссия), болезни печени и желчного пузыря, сахарный диабет 2 типа, ожирение.</p>`,
+    tags: ["Ессентуки №17", "ЖКТ", "Диабет", "Парк рядом", "Грязи"],
+    price: "от 5 000 ₽/сут",
+    lat: 44.0378, lng: 42.8621,
+    addr: "Ессентуки, ул. Анджиевского, 19",
+    conditions: ["gut", "diabetes"],
+  },
+  {
+    num: 7, img: "celebny.jpg",
+    name: "Санаторий «Целебный нарзан»",
+    city: "Кисловодск", stars: 3,
+    desc: "Уютный санаторий в тихом районе Кисловодска. Нарзанные ванны, физиотерапия, терренкур от санатория. Лучшее соотношение цены и качества.",
+    full: `<p>«Целебный нарзан» — небольшой камерный санаторий в тихом районе Кисловодска. Терренкурные маршруты начинаются прямо от входа.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны (общие и четырёхкамерные), физиотерапия, ультрафонофорез, магнитотерапия, парафиновые аппликации, массаж. Консультации терапевта и кардиолога.</p>
+    <p><strong>Профиль:</strong> сердечно-сосудистые заболевания в стадии компенсации, болезни нервной системы, хронические заболевания опорно-двигательного аппарата. Минимальный курс — 10 дней.</p>`,
+    tags: ["Нарзан", "Терренкур", "Доступные цены", "Физиотерапия"],
+    price: "от 3 800 ₽/сут",
+    lat: 43.9011, lng: 42.7165,
+    addr: "Кисловодск, ул. Широкая, 12",
+    conditions: ["heart", "nervous", "joints", "budget"],
+  },
+  {
+    num: 8, img: "teply.jpg",
+    name: "Санаторий «Тёплый стан»",
+    city: "Железноводск", stars: 4,
+    desc: "Современный санаторий в лесу Железноводска. Специализируется на лечении почек и мочеполовой системы.",
+    full: `<p>«Тёплый стан» расположен в живописном лесном массиве Железноводска. Свежий горный воздух и уникальный микроклимат дополняют лечебные процедуры при почечной патологии.</p>
+    <p><strong>Лечебная база:</strong> питьевые курсы железноводских вод (Смирновский, Славяновский источники), физиотерапия, ультразвук, магнитотерапия, грязевые аппликации, массаж. Консультации нефролога и уролога.</p>
+    <p><strong>Профиль:</strong> хронический пиелонефрит, мочекаменная болезнь (без острого приступа), хронический цистит, простатит. Программы для мужского здоровья.</p>`,
+    tags: ["Почки", "Урология", "Лес", "Железноводская вода", "Тамбукан"],
+    price: "от 5 500 ₽/сут",
+    lat: 44.1358, lng: 43.0271,
+    addr: "Железноводск, ул. Октябрьская, 15",
+    conditions: ["kidneys"],
+  },
+  {
+    num: 9, img: "dubovaya.jpg",
+    name: "Санаторий «Дубовая роща»",
+    city: "Железноводск", stars: 4,
+    desc: "Известный санаторий в вековом дубовом парке Железноводска. Широкий профиль: урология, гинекология, ЖКТ, тамбуканская грязь.",
+    full: `<p>«Дубовая роща» — один из старейших санаториев Железноводска в густом вековом дубовом парке в центре города.</p>
+    <p><strong>Лечебная база:</strong> грязелечение тамбуканской грязью (аппликации, гинекологические орошения, ректальные тампоны), минеральные ванны, питьевые курсы, физиотерапия, лазеротерапия. Процедурный кабинет работает без выходных.</p>
+    <p><strong>Профиль:</strong> урологические заболевания, женские болезни, хронический гастрит, заболевания кишечника. Хороший выбор для женщин с гинекологической патологией.</p>`,
+    tags: ["Дубовый парк", "Тамбуканская грязь", "Урология", "Минванны", "ЖКТ"],
+    price: "от 4 900 ₽/сут",
+    lat: 44.1389, lng: 43.0247,
+    addr: "Железноводск, ул. Калинина, 3",
+    conditions: ["kidneys", "gynecology", "gut"],
+  },
+  {
+    num: 10, img: "viktoriya.jpg",
+    name: "Санаторий «Виктория»",
+    city: "Ессентуки", stars: 3,
+    desc: "Исторический санаторий XIX века в центре Ессентуков. Питьевые курсы, грязелечение, уютная атмосфера старого курорта.",
+    full: `<p>Санаторий «Виктория» — одна из старейших здравниц Ессентуков, ведущая свою историю с конца XIX века.</p>
+    <p><strong>Питьевой курс:</strong> основа лечения. До питьевых галерей с источниками №4 и №17 — 7 минут пешком.</p>
+    <p><strong>Лечебная база:</strong> грязелечение, минеральные ванны, физиотерапия, электропроцедуры, ЛФК, массаж. Наблюдение терапевта и гастроэнтеролога на протяжении всего курса.</p>
+    <p><strong>Профиль:</strong> заболевания органов пищеварения, нарушения обмена веществ, хронический гастрит и колит в стадии ремиссии. Рекомендуется пожилым гостям.</p>`,
+    tags: ["История XIX в.", "Ессентуки", "ЖКТ", "Грязелечение", "Питьевой курс"],
+    price: "от 4 200 ₽/сут",
+    lat: 44.0359, lng: 42.8598,
+    addr: "Ессентуки, пр. Октябрьский, 11",
+    conditions: ["gut", "diabetes", "budget"],
+  },
+
+  // ── ПЯТИГОРСК ──────────────────────────────────────────
+  {
+    num: 11, img: "pyatigorsky_narzan.jpg",
+    name: "Санаторий «Пятигорский нарзан»",
+    city: "Пятигорск", stars: 4,
+    desc: "Расположен у подножия горы Машук рядом с Провалом. Специализируется на лечении опорно-двигательного аппарата и нервной системы с применением нарзанных и сероводородных ванн.",
+    full: `<p>«Пятигорский нарзан» находится в непосредственной близости от озера Провал и Верхней радоновой лечебницы — двух ключевых природных объектов Пятигорска. Благодаря расположению терренкурные маршруты по горе Машук начинаются прямо от санатория.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны, сероводородные ванны из пятигорских источников, грязевые аппликации тамбуканской грязью, физиотерапия, ЛФК, массаж, иглорефлексотерапия.</p>
+    <p><strong>Профиль:</strong> заболевания опорно-двигательного аппарата, периферической нервной системы, гинекологические заболевания. Реабилитация после травм и операций на суставах.</p>`,
+    tags: ["Нарзан", "Гора Машук", "Суставы", "Нервная система", "Гинекология"],
+    price: "от 5 200 ₽/сут",
+    lat: 44.0498, lng: 43.0712,
+    addr: "Пятигорск, ул. Козлова, 30",
+    conditions: ["joints", "nervous", "gynecology"],
+  },
+  {
+    num: 12, img: "rodnik_pyatigorsk.jpg",
+    name: "Санаторий «Родник»",
+    city: "Пятигорск", stars: 4,
+    desc: "Современный санаторий с полным спектром бальнеологических процедур, крытым бассейном и развитой диагностической базой. Широкий лечебный профиль.",
+    full: `<p>Санаторий «Родник» — один из наиболее оснащённых санаториев Пятигорска с точки зрения диагностики. Здесь работает собственная лаборатория, кабинет функциональной диагностики и ультразвукового исследования, что позволяет провести полноценное обследование прямо на курорте.</p>
+    <p><strong>Лечебная база:</strong> радоновые и сероводородные ванны, нарзанные процедуры, грязелечение, гидромассаж, физиотерапия, ЛФК, плавательный бассейн с минеральной водой.</p>
+    <p><strong>Профиль:</strong> многопрофильный санаторий: сердечно-сосудистые заболевания, опорно-двигательный аппарат, урология, гинекология, кожные болезни. Хороший выбор для тех, кто хочет совместить диагностику с лечением.</p>`,
+    tags: ["Бассейн", "Радон", "Диагностика", "Кардиология", "Многопрофильный"],
+    price: "от 5 600 ₽/сут",
+    lat: 44.0430, lng: 43.0660,
+    addr: "Пятигорск, ул. Ермолова, 1",
+    conditions: ["heart", "joints", "kidneys", "skin"],
+  },
+  {
+    num: 13, img: "lermontov_san.jpg",
+    name: "Санаторий «Лермонтов»",
+    city: "Пятигорск", stars: 3,
+    desc: "Исторический санаторий в центре Пятигорска, доступный по цене. Нарзанные ванны, грязелечение, физиотерапия. Хорошая база для лечения ЖКТ и нервной системы.",
+    full: `<p>Санаторий «Лермонтов» расположен в исторической части Пятигорска, в шаговой доступности от Цветника и Лермонтовских ванн. Одно из самых доступных по цене лечебных учреждений города при сохранении приемлемого уровня медицинской базы.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны, грязевые аппликации, физиотерапия, электролечение, массаж, ЛФК, питьевой курс минеральной воды.</p>
+    <p><strong>Профиль:</strong> хронические заболевания ЖКТ, нервной системы, хронические болезни органов дыхания. Рекомендуется пациентам, ориентированным на лечение при ограниченном бюджете.</p>`,
+    tags: ["Центр города", "Нарзан", "ЖКТ", "Доступные цены", "Нервная система"],
+    price: "от 3 500 ₽/сут",
+    lat: 44.0441, lng: 43.0628,
+    addr: "Пятигорск, пр. Кирова, 30",
+    conditions: ["gut", "nervous", "breath", "budget"],
+  },
+  {
+    num: 14, img: "beshtau.jpg",
+    name: "Санаторий «Бештау»",
+    city: "Пятигорск", stars: 4,
+    desc: "Санаторий у подножия горы Бештау с собственными источниками радоновой воды. Специализируется на лечении суставов, кожи и гинекологических заболеваний.",
+    full: `<p>«Бештау» расположен в живописном месте у подножия горы Бештау — пятиглавого вулкана, давшего название Пятигорску. Рядом — лесные массивы и экологически чистая зона вдали от городского шума.</p>
+    <p><strong>Лечебная база:</strong> радоновые ванны (природный радон из местных скважин), грязевые аппликации, физиотерапия, ультразвук, электрофорез, лечебная гимнастика. Гинекологический кабинет с орошениями.</p>
+    <p><strong>Профиль:</strong> артрит, артроз, остеохондроз, псориаз, экзема, гинекологические заболевания, патологии щитовидной железы. Минимальный курс лечения — 10 дней.</p>`,
+    tags: ["Радон", "Гора Бештау", "Суставы", "Кожа", "Гинекология"],
+    price: "от 4 800 ₽/сут",
+    lat: 44.0520, lng: 43.0580,
+    addr: "Пятигорск, ул. Свободы, 12",
+    conditions: ["joints", "skin", "gynecology"],
+  },
+
+  // ── КИСЛОВОДСК ─────────────────────────────────────────
+  {
+    num: 15, img: "azimut_kislovodsk.jpg",
+    name: "AZIMUT Здоровье «Долина Нарзанов»",
+    city: "Кисловодск", stars: 4,
+    desc: "Крупный современный санаторий сети AZIMUT с развитой инфраструктурой. Полный спектр бальнеологических процедур, комфортные номера, ресторан с диетическим питанием.",
+    full: `<p>AZIMUT «Долина Нарзанов» — один из крупнейших санаториев Кисловодска, входящий в федеральную гостиничную сеть AZIMUT. Сочетает высокий стандарт размещения с серьёзной медицинской базой.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны всех видов, ингаляции, физиотерапия, лазеротерапия, магнитотерапия, ЛФК в зале и бассейне, массаж. Консультации кардиолога, невролога, терапевта.</p>
+    <p><strong>Особенности:</strong> номерной фонд рассчитан на 600 человек, развитая спортивная инфраструктура, конференц-зал. Удобно для групп и корпоративного лечебного туризма. Питание по системе «шведский стол».</p>
+    <p><strong>Профиль:</strong> сердечно-сосудистые заболевания, патологии органов дыхания, нервная система.</p>`,
+    tags: ["Крупный", "Бассейн", "Шведский стол", "Кардиология", "Корпоративный"],
+    price: "от 5 800 ₽/сут",
+    lat: 43.9100, lng: 42.7180,
+    addr: "Кисловодск, пр. Победы, 141",
+    conditions: ["heart", "breath", "nervous"],
+  },
+  {
+    num: 16, img: "villa_arnest.jpg",
+    name: "Санаторий «Вилла Арнест»",
+    city: "Кисловодск", stars: 5,
+    desc: "Бутик-санаторий премиум-класса в тихом районе Кисловодска. Индивидуальный подход, ограниченное число гостей, авторские программы оздоровления.",
+    full: `<p>«Вилла Арнест» — один из немногих бутик-санаториев КМВ, рассчитанный на небольшое число гостей. Это обеспечивает максимально индивидуальный подход: каждый пациент получает персонального куратора и программу, составленную под конкретные задачи.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны, авторские программы детоксикации, антистресс-программы, косметологический кабинет, массаж, физиотерапия. Акцент на профилактику и превентивную медицину.</p>
+    <p><strong>Особенности:</strong> исторические здания с камерной атмосферой. Авторская кухня, собственный виноградник на территории. Подходит для тех, кто ценит приватность и индивидуальный сервис.</p>`,
+    tags: ["Бутик", "Люкс", "Индивидуальный подход", "Нарзан", "Антистресс"],
+    price: "от 14 000 ₽/сут",
+    lat: 43.9058, lng: 42.7145,
+    addr: "Кисловодск, ул. Ленина, 4",
+    conditions: ["heart", "nervous", "luxury"],
+  },
+  {
+    num: 17, img: "centrosoyuz.jpg",
+    name: "Санаторий «Центросоюз»",
+    city: "Кисловодск", stars: 4,
+    desc: "Крупный санаторий с богатой историей в самом центре Кисловодска. Широкий лечебный профиль, собственный бювет с минеральной водой трёх курортов.",
+    full: `<p>«Центросоюз» — один из старейших санаториев Кисловодска, основанный в советский период и сохранивший традиции санаторно-курортного лечения. Расположен в историческом центре города в окружении парковых аллей.</p>
+    <p><strong>Уникальная особенность:</strong> собственный бювет с минеральной водой сразу трёх курортов — нарзаном кисловодским, ессентукской №4 и славяновской из Железноводска. Это редкость даже по меркам КМВ.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны, грязелечение, физиотерапия, спелеотерапия (соляная комната), ЛФК, бассейн. 24 врача в штате, из них 15 высшей категории.</p>
+    <p><strong>Профиль:</strong> кардиология, заболевания органов дыхания, опорно-двигательный аппарат, нервная система.</p>`,
+    tags: ["Три вида воды", "Бассейн", "Кардиология", "Центр города", "История"],
+    price: "от 5 400 ₽/сут",
+    lat: 43.9035, lng: 42.7220,
+    addr: "Кисловодск, пр. Ленина, 1",
+    conditions: ["heart", "breath", "joints", "nervous"],
+  },
+  {
+    num: 18, img: "narzan_gallery_san.jpg",
+    name: "Санаторий «Главные нарзанные ванны»",
+    city: "Кисловодск", stars: 3,
+    desc: "Исторический санаторий в здании XIX века рядом с Нарзанной галереей. Специализируется на нарзанных ваннах и лечении сердечно-сосудистых заболеваний.",
+    full: `<p>«Главные нарзанные ванны» — объект с историей более 150 лет. Само здание является памятником архитектуры. Санаторий специализируется на классическом нарзанном лечении, отработанном здесь за полтора века практики.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны (общие, четырёхкамерные), ингаляции с минеральной водой, физиотерапия, электрофорез с нарзаном, массаж. Доступ к питьевому бювету Нарзанной галереи в 2 минутах ходьбы.</p>
+    <p><strong>Профиль:</strong> гипертоническая болезнь, ишемическая болезнь сердца в стадии компенсации, вегетативная дистония, хронические заболевания органов дыхания. Атмосфера исторического курорта.</p>`,
+    tags: ["История XIX в.", "Нарзан", "Кардиология", "Центр", "Доступные цены"],
+    price: "от 3 900 ₽/сут",
+    lat: 43.9045, lng: 42.7238,
+    addr: "Кисловодск, пер. Нарзанный, 1",
+    conditions: ["heart", "breath", "budget"],
+  },
+  {
+    num: 19, img: "dvorec_narzan.jpg",
+    name: "Санаторий «Дворец нарзанов»",
+    city: "Кисловодск", stars: 4,
+    desc: "Современный санаторий-отель с комфортными номерами и полноценной лечебной базой. Удобное расположение в курортной зоне, хорошие отзывы о сервисе.",
+    full: `<p>«Дворец нарзанов» — относительно молодой санаторий Кисловодска, открытый после реконструкции в 2010-х годах. Отличается современным оснащением номерного фонда при сохранении классических методик бальнеологического лечения.</p>
+    <p><strong>Лечебная база:</strong> нарзанные ванны, углекислые ванны, ингаляции, лазеротерапия, физиотерапия, ЛФК, массаж. Собственный питьевой бювет с нарзаном на территории.</p>
+    <p><strong>Особенности:</strong> номера после капитального ремонта, современная мебель, хорошая звукоизоляция. Расположен в 7 минутах ходьбы от Нарзанной галереи и входа в Курортный парк.</p>`,
+    tags: ["Нарзан", "Современный", "Кардиология", "Пульмонология", "Хороший сервис"],
+    price: "от 5 000 ₽/сут",
+    lat: 43.9025, lng: 42.7205,
+    addr: "Кисловодск, ул. Коминтерна, 14",
+    conditions: ["heart", "breath", "nervous"],
+  },
+
+  // ── ЖЕЛЕЗНОВОДСК ───────────────────────────────────────
+  {
+    num: 20, img: "plazha_zheleznov.jpg",
+    name: "Санаторий «Плаза» Железноводск",
+    city: "Железноводск", stars: 5,
+    desc: "Один из самых современных санаториев КМВ, открытый в 2022 году. Два 10-этажных корпуса в центре курортной зоны, 500 мест, собственная скважина с минеральной водой.",
+    full: `<p>«Плаза» в Железноводске — одна из самых новых здравниц КМВ, открытая в 2022 году. Это самый современный санаторий Железноводска и один из самых технологически оснащённых в регионе.</p>
+    <p><strong>Инфраструктура:</strong> два десятиэтажных корпуса, 500 мест единовременного проживания, СПА-комплекс с хаммамом и сауной, открытый солярий с панорамным видом на горы Бештау и Железная.</p>
+    <p><strong>Лечебная база:</strong> собственная скважина с водами «Славяновская» и «Ессентуки-4», бальнеологические ванны, физиотерапия, ЛФК, массаж, косметология.</p>
+    <p><strong>Профиль:</strong> урология, заболевания ЖКТ, почечная патология. Питание по системе «шведский стол». Подходит для гостей, ценящих современный формат.</p>`,
+    tags: ["Новый (2022)", "5 звёзд", "Собственная скважина", "СПА", "Шведский стол"],
+    price: "от 8 500 ₽/сут",
+    lat: 44.1365, lng: 43.0290,
+    addr: "Железноводск, ул. Шаумяна, 3",
+    conditions: ["kidneys", "gut", "luxury"],
+  },
+  {
+    num: 21, img: "istochnik_zhel.jpg",
+    name: "Санаторий «Источник»",
+    city: "Железноводск", stars: 4,
+    desc: "Санаторий в сосновом лесу у горы Бештау. Специализируется на урологии и болезнях ЖКТ. Доступ к источникам Смирновской и Славяновской воды.",
+    full: `<p>«Источник» расположен в лесной зоне Железноводска, в 5 км от центра города, у подножия горы Бештау. Это самый крупный естественный лесной массив Кавминвод — воздух здесь насыщен хвойными фитонцидами, что само по себе является терапевтическим фактором.</p>
+    <p><strong>Лечебная база:</strong> питьевые курсы железноводских вод (Смирновская, Славяновская, Лесная), грязелечение, физиотерапия, ультразвук, магнитотерапия, массаж. Консультации уролога и нефролога.</p>
+    <p><strong>Профиль:</strong> заболевания почек и мочевыводящих путей, хронические болезни ЖКТ, мужские болезни. Хороший выбор для пациентов с почечной патологией при ограниченном бюджете.</p>`,
+    tags: ["Лес", "Почки", "ЖКТ", "Мужское здоровье", "Природа"],
+    price: "от 4 600 ₽/сут",
+    lat: 44.1320, lng: 43.0210,
+    addr: "Железноводск, Курортная зона",
+    conditions: ["kidneys", "gut", "budget"],
+  },
+  {
+    num: 22, img: "zheleznovodsk_san.jpg",
+    name: "Санаторий «Железноводск»",
+    city: "Железноводск", stars: 4,
+    desc: "Один из старейших и наиболее известных санаториев города. Расположен в Курортном парке, прямой доступ к источникам Смирновского и Лермонтовского.",
+    full: `<p>Санаторий «Железноводск» занимает историческое здание в самом сердце Курортного парка. Именно отсюда удобнее всего совмещать лечебные процедуры с терренкурными прогулками — маршруты начинаются в 100 метрах от корпуса.</p>
+    <p><strong>Лечебная база:</strong> питьевые курсы (Смирновский и Лермонтовский источники в шаговой доступности), ванны с минеральной водой, грязевые аппликации тамбуканской грязью, физиотерапия, ЛФК.</p>
+    <p><strong>Профиль:</strong> мочекаменная болезнь, хронический пиелонефрит, гастриты, колиты. Исторический санаторий с традицией, подходящий для неторопливого лечебного отдыха.</p>`,
+    tags: ["Курортный парк", "Источники рядом", "Почки", "ЖКТ", "История"],
+    price: "от 4 400 ₽/сут",
+    lat: 44.1375, lng: 43.0260,
+    addr: "Железноводск, ул. Горького, 1",
+    conditions: ["kidneys", "gut"],
+  },
+  {
+    num: 23, img: "lesnoy_zhel.jpg",
+    name: "Санаторий «Лесной»",
+    city: "Железноводск", stars: 3,
+    desc: "Небольшой санаторий в лесном массиве Железноводска. Тихая обстановка, доступные цены, специализация на почках и мочеполовой системе.",
+    full: `<p>«Лесной» — один из наиболее доступных по цене санаториев Железноводска, расположенный в окружении хвойного и широколиственного леса. Камерная обстановка, небольшое число гостей и внимательный персонал делают его популярным среди пожилых пациентов.</p>
+    <p><strong>Лечебная база:</strong> питьевые курсы железноводской воды, физиотерапия, электропроцедуры, массаж, ЛФК. Терренкурный маршрут по лесным тропам доступен с территории санатория.</p>
+    <p><strong>Профиль:</strong> хронический пиелонефрит, цистит, мочекаменная болезнь в стадии ремиссии, хронические гастриты. Рекомендуется для длительного восстановительного лечения при ограниченном бюджете.</p>`,
+    tags: ["Лес", "Доступные цены", "Почки", "Тихо", "Пожилые"],
+    price: "от 3 200 ₽/сут",
+    lat: 44.1340, lng: 43.0185,
+    addr: "Железноводск, ул. Лесная, 5",
+    conditions: ["kidneys", "gut", "budget"],
+  },
+
+  // ── ЕССЕНТУКИ ──────────────────────────────────────────
+  {
+    num: 24, img: "essentuki_san.jpg",
+    name: "Санаторий «Ессентуки»",
+    city: "Ессентуки", stars: 4,
+    desc: "Крупный санаторий в центре Ессентуков с прямым выходом в Курортный парк. Лечение ЖКТ, обмена веществ и эндокринных заболеваний ессентукской минеральной водой.",
+    full: `<p>Санаторий «Ессентуки» — один из флагманов гастроэнтерологического лечения на Кавказских Минеральных Водах. Расположен в 5 минутах ходьбы от питьевых галерей с источниками №4 и №17, что позволяет включать питьевые курсы как обязательную часть программы.</p>
+    <p><strong>Лечебная база:</strong> питьевые курсы ессентукской воды, грязелечение тамбуканской грязью, физиотерапия, электропроцедуры, ЛФК, диетическое лечебное питание, консультации гастроэнтеролога и эндокринолога.</p>
+    <p><strong>Профиль:</strong> хронические заболевания желудка и кишечника, болезни печени и желчевыводящих путей, сахарный диабет 2 типа, ожирение. Одна из лучших баз для лечения метаболического синдрома.</p>`,
+    tags: ["ЖКТ", "Диабет", "Парк рядом", "Ессентуки №17", "Эндокринология"],
+    price: "от 4 800 ₽/сут",
+    lat: 44.0390, lng: 42.8640,
+    addr: "Ессентуки, ул. Пушкина, 12",
+    conditions: ["gut", "diabetes"],
+  },
+  {
+    num: 25, img: "shakhter.jpg",
+    name: "Санаторий «Шахтёр»",
+    city: "Ессентуки", stars: 4,
+    desc: "Крупный профсоюзный санаторий с развитой инфраструктурой и доступными ценами. Широкий лечебный профиль, бассейн, большая территория с парком.",
+    full: `<p>«Шахтёр» — один из крупнейших санаториев Ессентуков, сохранивший традиции советской здравницы с обширным номерным фондом и разветвлённой лечебной базой. Несмотря на название, принимает гостей из всех регионов и сфер деятельности.</p>
+    <p><strong>Лечебная база:</strong> грязелечение, нарзанные и углекислые ванны, питьевые курсы минеральной воды, физиотерапия, ЛФК, плавательный бассейн. Широкий выбор диагностических процедур.</p>
+    <p><strong>Особенности:</strong> большая тенистая территория с прогулочными аллеями, развлекательная и спортивная инфраструктура, библиотека, кинозал. Питание — трёхразовое с диетическим вариантом.</p>
+    <p><strong>Профиль:</strong> заболевания ЖКТ, сердечно-сосудистой и нервной системы, опорно-двигательного аппарата.</p>`,
+    tags: ["Бассейн", "Большой", "ЖКТ", "Кардиология", "Доступные цены"],
+    price: "от 4 200 ₽/сут",
+    lat: 44.0350, lng: 42.8580,
+    addr: "Ессентуки, ул. Разумовского, 10",
+    conditions: ["gut", "heart", "joints", "budget"],
+  },
+  {
+    num: 26, img: "yunost.jpg",
+    name: "Санаторий «Юность»",
+    city: "Ессентуки", stars: 3,
+    desc: "Клинический центр в центре Ессентуков. Один из самых доступных по цене вариантов с качественной медицинской базой. Специализация — ЖКТ и эндокринология.",
+    full: `<p>«Юность» (Клинический центр Медицинского центра) — компактное лечебное учреждение в центре Ессентуков, хорошо известное местным жителям и постоянным гостям курорта. Делает ставку на медицинское качество при минимальных ценах.</p>
+    <p><strong>Лечебная база:</strong> питьевые курсы ессентукской воды, физиотерапия, грязелечение, ЛФК. Консультации терапевта, гастроэнтеролога, эндокринолога. Небольшой штат с высокой долей врачей первой и высшей категории.</p>
+    <p><strong>Профиль:</strong> хронические гастриты, дискинезия желчевыводящих путей, сахарный диабет 2 типа, хронический панкреатит в ремиссии. Рекомендуется тем, кто ищет качественное лечение при ограниченном бюджете.</p>`,
+    tags: ["Доступные цены", "ЖКТ", "Диабет", "Центр города", "Медицинский центр"],
+    price: "от 3 400 ₽/сут",
+    lat: 44.0365, lng: 42.8610,
+    addr: "Ессентуки, пр. Октябрьский, 4",
+    conditions: ["gut", "diabetes", "budget"],
+  },
+  {
+    num: 27, img: "kavkazskaya_riviera.jpg",
+    name: "Санаторий «Кавказская Ривьера»",
+    city: "Ессентуки", stars: 4,
+    desc: "Современный санаторий в тихой части Ессентуков. Комфортные номера, развитая СПА-инфраструктура, индивидуальные оздоровительные программы.",
+    full: `<p>«Кавказская Ривьера» — санаторий нового поколения в Ессентуках, ориентированный на гостей, ценящих комфорт и современный уровень сервиса. Удалён от центра, что обеспечивает тишину и спокойствие.</p>
+    <p><strong>Лечебная база:</strong> полный спектр физиотерапевтических процедур, бальнеологические ванны, питьевые курсы, СПА с бассейном, массажный кабинет. Программы детокса и антистресса.</p>
+    <p><strong>Особенности:</strong> ландшафтный дизайн территории, летние беседки, уютные зоны отдыха. Диетическое питание с возможностью формирования меню по медицинским показаниям.</p>
+    <p><strong>Профиль:</strong> профилактические программы, заболевания ЖКТ, нервная система, восстановительное лечение после стрессов и хронической усталости.</p>`,
+    tags: ["СПА", "Детокс", "Антистресс", "ЖКТ", "Современный"],
+    price: "от 5 500 ₽/сут",
+    lat: 44.0340, lng: 42.8550,
+    addr: "Ессентуки, ул. Баталинская, 6",
+    conditions: ["gut", "nervous"],
+  },
+  {
+    num: 28, img: "zarya_essentuki.jpg",
+    name: "Санаторий «Заря»",
+    city: "Ессентуки", stars: 3,
+    desc: "Небольшой уютный санаторий с домашней атмосферой. Специализируется на лечении ЖКТ и заболеваний обмена веществ. Тихое расположение, доступные цены.",
+    full: `<p>«Заря» — скромный, но хорошо организованный санаторий в жилом квартале Ессентуков. Выбирают его прежде всего за домашнюю атмосферу: небольшое число мест позволяет персоналу уделять каждому пациенту достаточно внимания.</p>
+    <p><strong>Лечебная база:</strong> питьевые курсы ессентукской воды (галереи в 10 минутах ходьбы), физиотерапия, электролечение, массаж, ЛФК. Консультации терапевта и диетолога.</p>
+    <p><strong>Профиль:</strong> хронические гастриты, нарушения обмена веществ, хронические запоры, дискинезия желчевыводящих путей. Рекомендован для неторопливого лечения в спокойной обстановке.</p>`,
+    tags: ["Домашняя атмосфера", "ЖКТ", "Обмен веществ", "Доступные цены", "Тихо"],
+    price: "от 3 000 ₽/сут",
+    lat: 44.0325, lng: 42.8560,
+    addr: "Ессентуки, ул. Гоголя, 15",
+    conditions: ["gut", "diabetes", "budget"],
+  },
+  {
+    num: 29, img: "essentuki_resort.jpg",
+    name: "Санаторий «Семья»",
+    city: "Ессентуки", stars: 4,
+    desc: "Один из немногих санаториев КМВ, ориентированных на семейный отдых с детьми. Детские программы лечения, анимация, бассейн, безопасная территория.",
+    full: `<p>«Семья» — редкий для КМВ формат: санаторий, изначально спроектированный для семейного отдыха с детьми. Здесь есть специализированные детские программы лечения, педиатр в штате и детское лечебное питание.</p>
+    <p><strong>Детская программа:</strong> обследование и лечение заболеваний ЖКТ у детей с применением ессентукской воды, физиотерапия для детей, ЛФК с игровыми элементами, плавательный бассейн с детской зоной.</p>
+    <p><strong>Инфраструктура:</strong> игровая площадка, детский клуб с аниматорами, комнаты для игр. Номера семейной планировки с возможностью размещения двух детей.</p>
+    <p><strong>Профиль:</strong> хронические заболевания ЖКТ у взрослых и детей, профилактические программы, семейный оздоровительный отдых.</p>`,
+    tags: ["Семейный", "Дети", "Бассейн", "ЖКТ", "Педиатр"],
+    price: "от 5 200 ₽/сут",
+    lat: 44.0380, lng: 42.8630,
+    addr: "Ессентуки, ул. Семашко, 4",
+    conditions: ["gut", "family"],
+  },
+  {
+    num: 30, img: "magnolia.jpg",
+    name: "Санаторий «Магнолия»",
+    city: "Ессентуки", stars: 4,
+    desc: "Современный санаторий с обновлённым номерным фондом. Специализируется на лечении ЖКТ, эндокринологии и болезнях обмена веществ. Питание по принципу лечебных диет.",
+    full: `<p>«Магнолия» прошла масштабную реконструкцию в 2018–2020 годах и сегодня предлагает один из самых современных номерных фондов среди санаториев Ессентуков при сохранении традиционного бальнеологического лечения.</p>
+    <p><strong>Лечебная база:</strong> питьевые курсы ессентукских вод №4 и №17, грязелечение, углекислые ванны, физиотерапия, ЛФК, консультации гастроэнтеролога, эндокринолога, терапевта. Собственная диетическая кухня.</p>
+    <p><strong>Особенности:</strong> питание строится по принципу лечебных столов — каждый пациент получает меню, согласованное с лечащим врачом. Уютный сад на территории, летние беседки для отдыха.</p>
+    <p><strong>Профиль:</strong> хронические заболевания ЖКТ, сахарный диабет 2 типа, метаболический синдром, ожирение.</p>`,
+    tags: ["ЖКТ", "Диабет", "Обмен веществ", "Лечебное питание", "После реновации"],
+    price: "от 5 000 ₽/сут",
+    lat: 44.0355, lng: 42.8595,
+    addr: "Ессентуки, ул. Анджиевского, 7",
+    conditions: ["gut", "diabetes"],
+  }
+];
+
+let selectedConditions = new Set();
+
+function buildPickerChips() {
+  const grid = document.getElementById('picker-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  conditions.forEach(c => {
+    const chip = document.createElement('div');
+    chip.className = 'picker-chip';
+    chip.dataset.id = c.id;
+    chip.innerHTML = `<span class="chip-icon">${c.icon}</span>${c.label}`;
+    chip.onclick = () => {
+      chip.classList.toggle('selected');
+      if (selectedConditions.has(c.id)) selectedConditions.delete(c.id);
+      else selectedConditions.add(c.id);
+      document.getElementById('picker-hint').textContent =
+        selectedConditions.size ? `Выбрано: ${selectedConditions.size}` : '';
+    };
+    grid.appendChild(chip);
+  });
+}
+
+function runPicker() {
+  const list = document.getElementById('san-list');
+  const divider = document.getElementById('picker-divider');
+  const resultTitle = document.getElementById('picker-result-title');
+  list.innerHTML = '';
+
+  if (selectedConditions.size === 0) {
+    resultTitle.style.display = 'none';
+    divider.style.display = 'none';
+    list.innerHTML = '<div class="picker-empty">Выберите хотя бы одно показание для подбора санатория.</div>';
+    return;
+  }
+
+  const scored = sanatoria
+    .map(s => ({ ...s, score: s.conditions.filter(c => selectedConditions.has(c)).length }))
+    .filter(s => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+
+  divider.style.display = 'block';
+
+  if (scored.length === 0) {
+    resultTitle.style.display = 'none';
+    list.innerHTML = '<div class="picker-empty">По вашим показаниям подходящих санаториев не найдено. Попробуйте изменить выбор.</div>';
+    return;
+  }
+
+  resultTitle.style.display = 'block';
+  resultTitle.textContent = `Найдено подходящих санаториев: ${scored.length}`;
+  renderSanatoria(scored);
+}
+
+function resetPicker() {
+  selectedConditions.clear();
+  document.querySelectorAll('.picker-chip').forEach(c => c.classList.remove('selected'));
+  document.getElementById('picker-hint').textContent = '';
+  document.getElementById('san-list').innerHTML = '';
+  document.getElementById('picker-divider').style.display = 'none';
+  document.getElementById('picker-result-title').style.display = 'none';
+}
+
+function toggleSanFull(btn) {
+  const arrow = btn.querySelector('.san-arrow');
+  const full = btn.closest('.san-info').querySelector('.san-full');
+  arrow.classList.toggle('open');
+  full.classList.toggle('open');
+}
+
+function renderSanatoria(list) {
+  const container = document.getElementById('san-list');
+  container.innerHTML = '';
+  list.forEach((s, idx) => {
+    const mapSrc = `https://maps.google.com/maps?q=${s.lat},${s.lng}&z=15&output=embed`;
+    const starsHtml = '★'.repeat(s.stars) + '☆'.repeat(5 - s.stars);
+    const tagsHtml = s.tags.map(t => `<span class="san-tag">${t}</span>`).join('');
+    const imgSrc = `images/sanatories/${s.img}`;
+    const imgHtml = `<img class="san-img" src="${imgSrc}" alt="${s.name}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="san-img-placeholder" style="display:none">🏨</div>`;
+
+    const row = document.createElement('div');
+    row.className = 'san-row';
+    row.innerHTML = `
+      <div class="san-num">${idx + 1}</div>
+      <div class="san-img-wrap">
+        ${imgHtml}
+        <div class="san-map-bubble">
+          <iframe src="${mapSrc}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+      <div class="san-info">
+        <div class="san-header">
+          <div class="san-name">${s.name}</div>
+          <div class="san-city">${s.city}</div>
+          <div class="san-stars">${starsHtml}</div>
+        </div>
+        <div class="san-desc">${s.desc}</div>
+        <div class="san-tags">${tagsHtml}</div>
+        <div class="san-price">
+          <span class="san-price-val">${s.price}</span>
+          <span class="san-price-label">/ за человека</span>
+        </div>
+        <div class="san-full">${s.full}</div>
+        <div class="san-expand-line" onclick="toggleSanFull(this)">
+          <hr>
+          <div class="san-arrow">&#x2304;</div>
+        </div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+buildPickerChips();
+
+// ===== ПИТАНИЕ =====
+const foodPlaces = [
+  {
+    city: "Пятигорск",
+    places: [
+      {
+        name: "Крыша",
+        type: "Ресторан",
+        icon: "🍽️",
+        img: "images/Food/krisha.jpg",
+        rating: "4.7",
+        check: "800–1500 ₽",
+        addr: "пр. Кирова, 65 (ТРЦ Галерея, крыша)",
+        desc: "Самое популярное место Пятигорска — ресторан на крыше торгового центра с панорамным видом на Машук и горы. Кавказская, европейская и азиатская кухня. Летом открывается стеклянная веранда. Живая музыка вечерами.",
+        review: "Лучшее место для романтического ужина с видом на горы. Мясные блюда — шедевр, домашний лимонад освежает."
+      },
+      {
+        name: "Печорин",
+        type: "Ресторан",
+        icon: "🥩",
+        img: "images/Food/pecherin.jpg",
+        rating: "4.6",
+        check: "700–1200 ₽",
+        addr: "ул. Панагюриште, 1",
+        desc: "Атмосферный ресторан в духе XIX века — кавказская, европейская и старорусская кухня. Знамениты завтраками в «барском стиле». Крем-суп «Хоровац», салат с паштетом из печени, тыквенные лепёшки.",
+        review: "Завтрак в гусарском стиле — отдельный экспириенс. Очень вкусный холодный чай и оригинальная подача блюд."
+      },
+      {
+        name: "Киликия",
+        type: "Шашлычная",
+        icon: "🔥",
+        img: "images/Food/kilikia.jpg",
+        rating: "4.8",
+        check: "500–900 ₽",
+        addr: "пр. Кирова, 43а",
+        desc: "Легендарное место Пятигорска с лучшим бараньим шашлыком в городе по мнению местных жителей. Простая обстановка, огромные порции, честные цены. Люля-кебаб, осетинские пироги, армянская кухня.",
+        review: "Лучший шашлык из баранины на КМВ! Были во многих заведениях — Киликия вне конкуренции."
+      },
+    ]
+  },
+  {
+    city: "Кисловодск",
+    places: [
+      {
+        name: "Высота 5642",
+        type: "Ресторан",
+        icon: "🏔️",
+        rating: "4.6",
+        check: "600–1500 ₽",
+        addr: "Курортный бульвар, 13",
+        desc: "Один из самых популярных ресторанов Кисловодска от Novikov Group, названный в честь высоты Эльбруса. Три формата: ресторан, бургерная и булочная. Отличные бургеры с котлетой из баранины, крафтовое пиво, домашний лимонад для детей.",
+        review: "Высокий уровень сервиса для Кисловодска. Бургер с бараниной — мастхэв. Уютная обстановка, работает до полуночи."
+      },
+      {
+        name: "Старый Парк",
+        type: "Кафе",
+        icon: "🌿",
+        rating: "4.5",
+        check: "500–1000 ₽",
+        addr: "Курортный парк, центральная аллея",
+        desc: "Кафе прямо в Курортном парке Кисловодска — идеальное место для обеда после прогулки по терренкуру. Кавказская кухня, отличное мясо на гриле, осетинские пироги, травяной чай. Живописная веранда среди деревьев.",
+        review: "После прогулки по парку — идеальное место. Мясо на гриле — лучшее что ел в Кисловодске. Порции огромные."
+      },
+      {
+        name: "Грузинские традиции",
+        type: "Хинкальная",
+        icon: "🥟",
+        rating: "4.7",
+        check: "400–700 ₽",
+        addr: "ул. Седлогорская, 118а",
+        desc: "Лучшая хинкальная Кисловодска по отзывам туристов и местных. Харчо, сациви, хачапури всех видов, хинкали с сочным мясным бульоном, шашлык, долма в виноградных листьях. Летняя веранда, вечерами — живая музыка.",
+        review: "Ужин был потрясающим! Хинкали — просто объедение, бульон не вытекает. Стоит отдельной поездки на такси."
+      },
+      {
+        name: "Снежинка",
+        type: "Кафе",
+        icon: "☕",
+        rating: "4.4",
+        check: "150–300 ₽",
+        addr: "ул. Кирова, 1а",
+        desc: "Легендарное историческое кафе Кисловодска, открывшееся в 1960-х годах. Главная достопримечательность — знаменитые пончики по смешным ценам. Бюджетный обед, простая домашняя кухня, ностальгическая атмосфера советского кафе.",
+        review: "Пончики здесь знаменитые — надо брать сразу много, расходятся моментально. Цены — как будто из другого времени."
+      },
+    ]
+  },
+  {
+    city: "Ессентуки",
+    places: [
+      {
+        name: "Тинатин",
+        type: "Ресторан",
+        icon: "🍖",
+        rating: "4.5",
+        check: "600–1000 ₽",
+        addr: "ул. Труда, 6б",
+        desc: "Лучший ресторан Ессентуков с кавказской кухней. Большой выбор блюд: шашлык, хинкали, люля, пироги. Уютный интерьер, внимательный персонал. Рекомендуется заранее бронировать столик в вечернее время.",
+        review: "Отличное место для полноценного ужина в Ессентуках. Порции большие, всё свежее. Шашлык из баранины — лучший."
+      },
+      {
+        name: "Отдых",
+        type: "Кафе-гриль",
+        icon: "🥗",
+        rating: "4.3",
+        check: "400–800 ₽",
+        addr: "ул. Калинина, 5а",
+        desc: "Популярное кафе в центре Ессентуков, специализирующееся на мясе-гриль и кавказской кухне. Просторный зал, летняя терраса, быстрое обслуживание. Хорошо подходит для полноценного обеда в середине дня.",
+        review: "Хорошее соотношение цена/качество. Быстро готовят, порции сытные. Рядом с санаториями — очень удобно."
+      },
+    ]
+  },
+  {
+    city: "Железноводск",
+    places: [
+      {
+        name: "Тинатин",
+        type: "Ресторан",
+        icon: "🍽️",
+        rating: "4.4",
+        check: "500–900 ₽",
+        addr: "ул. Калинина, 7а",
+        desc: "Уютный ресторан кавказской кухни в центре Железноводска. Шашлык, хинкали, грузинские блюда, местные вина. Приветливый персонал, домашняя атмосфера. Работает ежедневно с 8:30 до 23:00.",
+        review: "Отличный приветливый персонал. Кухня домашняя и вкусная. Самое достойное место в Железноводске для ужина."
+      },
+      {
+        name: "Арабика",
+        type: "Кофейня",
+        icon: "☕",
+        rating: "4.6",
+        check: "200–400 ₽",
+        addr: "ул. Ленина, 127",
+        desc: "Лучшая кофейня Железноводска — большой выбор десертов, сортов чая и кофе. Уютное место для завтрака или послеобеденного отдыха. Рекомендуется любителям сладкого и ценителям хорошего кофе.",
+        review: "Лучший кофе в Железноводске. Десерты домашние и очень вкусные. Тихое место, можно посидеть с книгой."
+      },
+      {
+        name: "Избушка лесника",
+        type: "Ресторан",
+        icon: "🌲",
+        rating: "4.3",
+        check: "500–800 ₽",
+        addr: "гора Развалка (загородный маршрут)",
+        desc: "Ресторан кавказской и русской кухни на горе Развалка — колоритное место с атмосферой настоящего горного отдыха. Рекомендуется посещать в комплексе с прогулкой на гору. Простые добротные блюда, большие порции.",
+        review: "Аутентичное место — деревянный интерьер, горный воздух, вкусное мясо. Лучше идти сюда после экскурсии на Развалку."
+      },
+    ]
+  }
+];
+
+function buildFood() {
+  const container = document.getElementById('food-list');
+  if (!container) return;
+
+  foodPlaces.forEach(cityData => {
+    const group = document.createElement('div');
+    group.className = 'food-city-group';
+    group.innerHTML = `<div class="food-city-label">${cityData.city}</div>`;
+
+    cityData.places.forEach((p, idx) => {
+      const stars = Math.round(parseFloat(p.rating));
+      const starsHtml = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+      const row = document.createElement('div');
+      row.className = 'food-row';
+      const imgHtml = p.img
+        ? `<img src="${p.img}" alt="${p.name}" style="width:140px;height:90px;object-fit:cover;border-radius:8px;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          + `<div style="display:none;width:140px;height:90px;background:linear-gradient(135deg,rgba(0,0,100,0.5),rgba(0,60,180,0.4));border-radius:8px;align-items:center;justify-content:center;font-size:2.5rem;">${p.icon}</div>`
+        : `<div style="width:140px;height:90px;background:linear-gradient(135deg,rgba(0,0,100,0.5),rgba(0,60,180,0.4));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">${p.icon}</div>`;
+
+      row.innerHTML = `
+        <div class="food-type-badge" style="font-size:1.1rem;font-family:'Montserrat',sans-serif;font-weight:800;color:rgba(255,255,255,0.18);padding-top:2px;">${idx + 1}</div>
+        <div class="food-img-wrap" style="background:none;padding:0;">${imgHtml}</div>
+        <div class="food-info">
+          <div class="food-header">
+            <div class="food-name">${p.name}</div>
+            <div class="food-type">${p.type}</div>
+            <div class="food-rating">${starsHtml} ${p.rating}</div>
+          </div>
+          <div class="food-desc">${p.desc}</div>
+          <div class="food-meta">
+            <span class="food-addr">📍 ${p.addr}</span>
+            <span class="food-check">~${p.check}</span>
+          </div>
+          <div class="food-review">«${p.review}»</div>
+        </div>
+      `;
+      group.appendChild(row);
+    });
+
+    container.appendChild(group);
+  });
+}
+
+buildFood();
+
+function afishaScroll(dir) {
+  const grid = document.getElementById('afisha-grid');
+  grid.scrollBy({ left: dir * 560, behavior: 'smooth' });
+}
+
+loadAfisha();
+
+// ===== HEADER SCROLL SHRINK =====
+(function() {
+  const header = document.querySelector('header');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        header.classList.toggle('scrolled', window.scrollY > 40);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+})();
+
+// ===== BURGER MENU =====
+function toggleMenu() {
+  const open = document.getElementById('sideMenu').classList.toggle('open');
+  document.getElementById('menuOverlay').classList.toggle('open', open);
+  document.getElementById('burgerBtn').classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function closeMenu() {
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — КМВ Путеводитель</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0000FF;
+    --blue-dark: #0000cc;
+    --blue-light: #3399ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'PT Sans', sans-serif;
+    color: white;
+    line-height: 1.7;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url('images/about_bg.png') center center / cover no-repeat;
+    filter: blur(6px);
+    transform: scale(1.05);
+    z-index: -2;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.78);
+    z-index: -1;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: rgba(0,0,180,0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background 0.35s ease;
+  }
+
+  header.scrolled { background: rgba(0,0,140,0.82); }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    transition: padding 0.35s ease;
+  }
+
+  header.scrolled .header-inner { padding: 8px 32px; }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 48px;
+    height: 33px;
+    mix-blend-mode: screen;
+    transition: width 0.35s, height 0.35s;
+  }
+
+  header.scrolled .logo-icon { width: 36px; height: 25px; }
+
+  .logo-text {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    white-space: nowrap;
+    transition: font-size 0.35s, opacity 0.35s;
+  }
+
+  header.scrolled .logo-text { font-size: 0.72rem; opacity: 0.65; }
+
+  .burger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    position: relative;
+    z-index: 201;
+  }
+
+  .burger-btn:hover { background: rgba(255,255,255,0.1); }
+
+  .burger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+    transform-origin: center;
+  }
+
+  .burger-btn.open .burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger-btn.open .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .burger-btn.open .burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(4px);
+    z-index: 150;
+  }
+
+  .menu-overlay.open { display: block; }
+
+  .side-menu {
+    position: fixed;
+    top: 0; right: 0;
+    width: 280px;
+    height: 100vh;
+    background: #2a2a2e;
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.5);
+  }
+
+  .side-menu.open { transform: translateX(0); }
+
+  .side-menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    min-height: 64px;
+  }
+
+  .side-menu-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .side-menu-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .side-menu-close:hover { color: white; background: rgba(255,255,255,0.08); }
+
+  .side-menu-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+    flex: 1;
+  }
+
+  .side-menu-nav a {
+    display: block;
+    padding: 14px 28px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 600;
+    transition: background 0.15s, color 0.15s, padding-left 0.2s;
+    border-left: 3px solid transparent;
+  }
+
+  .side-menu-nav a:hover {
+    background: rgba(255,255,255,0.06);
+    color: white;
+    padding-left: 34px;
+    border-left-color: var(--blue-light);
+  }
+
+  .side-menu-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 8px 28px;
+  }
+
+  .side-menu-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    padding: 8px 28px 4px;
+  }
+
+  /* ===== PAGE ===== */
+  .page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 64px 32px 80px;
+  }
+
+  .breadcrumb {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+    letter-spacing: 0.04em;
+  }
+
+  .breadcrumb a {
+    color: var(--blue-light);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  .page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 56px;
+  }
+
+  /* ===== CATEGORY ===== */
+  .faq-category {
+    margin-bottom: 52px;
+  }
+
+  .faq-category-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .faq-category-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* ===== FAQ ITEM ===== */
+  .faq-item {
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .faq-item:last-child { border-bottom: none; }
+
+  .faq-q {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .faq-q-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.35;
+    transition: color 0.2s;
+  }
+
+  .faq-item:hover .faq-q-text { color: var(--blue-light); }
+
+  .faq-toggle {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.4);
+    font-size: 13px;
+    margin-top: 2px;
+    transition: border-color 0.2s, color 0.2s, transform 0.3s, background 0.2s;
+  }
+
+  .faq-item.open .faq-toggle {
+    transform: rotate(45deg);
+    border-color: var(--blue-light);
+    color: var(--blue-light);
+    background: rgba(51,153,255,0.1);
+  }
+
+  .faq-a {
+    display: none;
+    padding: 0 40px 22px 0;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.62);
+    line-height: 1.75;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .faq-item.open .faq-a { display: block; }
+
+  .faq-a p { margin-bottom: 10px; }
+  .faq-a p:last-child { margin-bottom: 0; }
+
+  .faq-a strong { color: rgba(255,255,255,0.85); font-weight: 700; }
+
+  .faq-a ul {
+    list-style: none;
+    margin: 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .faq-a ul li {
+    display: flex;
+    gap: 8px;
+    color: rgba(255,255,255,0.62);
+    font-size: 0.92rem;
+  }
+
+  .faq-a ul li::before {
+    content: '—';
+    color: var(--blue-light);
+    flex-shrink: 0;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: rgba(0,0,180,0.55);
+    backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 28px 32px;
+    text-align: center;
+  }
+
+  .footer-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .footer-back:hover { color: white; }
+</style>
+</head>
+<body>
+
+<header id="pageHeader">
+  <div class="header-inner">
+    <a href="kmv_guide.html" class="logo">
+      <img src="images/mountain_icon.png" alt="Горы" class="logo-icon">
+      <span class="logo-text">КМВ &nbsp;·&nbsp; Путеводитель</span>
+    </a>
+    <button class="burger-btn" id="burgerBtn" onclick="toggleMenu()">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="side-menu" id="sideMenu">
+  <div class="side-menu-top">
+    <span class="side-menu-logo">КМВ</span>
+    <button class="side-menu-close" onclick="closeMenu()">✕</button>
+  </div>
+  <nav class="side-menu-nav">
+    <div class="side-menu-label">Навигация</div>
+    <a href="kmv_guide.html#about"       onclick="closeMenu()">Главное о КМВ</a>
+    <a href="kmv_guide.html#afisha"      onclick="closeMenu()">Афиша</a>
+    <a href="kmv_guide.html#attractions" onclick="closeMenu()">Достопримечательности</a>
+    <a href="kmv_guide.html#sanatoria"   onclick="closeMenu()">Санатории</a>
+    <div class="side-menu-divider"></div>
+    <div class="side-menu-label">Полезное</div>
+    <a href="know.html" onclick="closeMenu()">Что нужно знать?</a>
+    <a href="faq.html"  onclick="closeMenu()">FAQ</a>
+  </nav>
+</div>
+
+<div class="page-wrap">
+  <div class="breadcrumb"><a href="kmv_guide.html">← Главная</a> &nbsp;/&nbsp; FAQ</div>
+  <h1 class="page-title">Частые вопросы</h1>
+  <p class="page-subtitle">Всё, что хотели спросить перед поездкой на КМВ</p>
+
+  <!-- ── ПЛАНИРОВАНИЕ ── -->
+  <div class="faq-category">
+    <div class="faq-category-title">Планирование поездки</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Когда лучше всего ехать на КМВ?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p><strong>Май–июнь и сентябрь</strong> — оптимальное время. Погода комфортная (+18…+24 °C), туристов меньше чем в июле–августе, цены в санаториях ниже, природа в самом красивом виде.</p>
+        <p><strong>Июль–август</strong> — пик сезона. Жарко (+28…+32 °C), многолюдно, цены максимальные. Подходит тем, кто едет ради солнца и активного отдыха.</p>
+        <p><strong>Октябрь–апрель</strong> — низкий сезон. Санатории работают, цены минимальные, очередей нет. Для лечебного отдыха — отличный выбор. Из минусов: часть природных объектов менее живописна.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Сколько дней нужно для осмотра всего региона?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Для знакомства с основными достопримечательностями всех четырёх городов достаточно <strong>5–7 дней</strong>. Примерный план:</p>
+        <ul>
+          <li>День 1–2 — Пятигорск: Машук, Провал, домик Лермонтова, Цветник</li>
+          <li>День 3–4 — Кисловодск: Нарзанная галерея, Курортный парк, Замок коварства и любви</li>
+          <li>День 5 — Ессентуки: Курортный парк, источники, грязелечебница</li>
+          <li>День 6 — Железноводск: дворец эмира, Пушкинская галерея, гора Железная</li>
+          <li>День 7 — резерв или однодневная поездка в Приэльбрусье</li>
+        </ul>
+        <p>Если едете только на лечение в санаторий — стандартный курс составляет <strong>14–21 день</strong>.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Какой город выбрать в качестве базы?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p><strong>Пятигорск</strong> — лучший выбор для большинства туристов. Это транспортный хаб региона: аэропорт Минеральные Воды в 20 минутах, ж/д станция, автобусы во все города КМВ. Максимум достопримечательностей, развитая инфраструктура, широкий выбор жилья.</p>
+        <p><strong>Кисловодск</strong> — если главная цель отдых и природа. Самый зелёный и красивый город, лучший воздух, знаменитый национальный парк. Чуть дальше от аэропорта (50 минут).</p>
+        <p><strong>Ессентуки и Железноводск</strong> — оптимальны для санаторного лечения, но как базы для осмотра региона уступают первым двум.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Как добраться до КМВ?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p><strong>Самолёт</strong> — аэропорт Минеральные Воды (MRV) принимает рейсы из Москвы, Санкт-Петербурга и других городов. От аэропорта до Пятигорска — 20 минут на такси или маршрутке.</p>
+        <p><strong>Поезд</strong> — прямые поезда из Москвы до Кисловодска (через Пятигорск, Ессентуки), время в пути около 22–24 часов. Удобно для тех, кто едет с багажом.</p>
+        <p><strong>Автомобиль</strong> — из Москвы около 1500 км по трассе М4 и далее через Ростов-на-Дону. Дорога займёт 16–18 часов. Парковка в городах платная, но доступная.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Как передвигаться между городами КМВ?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Все четыре города связаны <strong>электричкой</strong> — это самый удобный способ. Маршрут: Минеральные Воды — Пятигорск — Лермонтов — Ессентуки — Кисловодск. Поезда ходят часто, билет стоит 50–120 рублей.</p>
+        <p><strong>Маршрутки и автобусы</strong> курсируют между всеми городами каждые 15–30 минут. Дешевле такси, но медленнее.</p>
+        <p><strong>Такси</strong> (Яндекс Go, местные службы) — между городами стоит 300–600 рублей. Удобно при поездках с вещами или по нестандартным маршрутам.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Можно ли добраться до Эльбруса с КМВ?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Да, и это популярный однодневный маршрут. От Пятигорска до посёлка Терскол (у подножия Эльбруса) около 200 км — примерно 3 часа на машине или туристическом автобусе.</p>
+        <p>В Приэльбрусье работают <strong>канатные дороги</strong>, поднимающие на высоту до 3847 м (станция «Мир»). Подъём доступен без альпинистской подготовки. На вершину (5642 м) идут только подготовленные альпинисты с гидами.</p>
+        <p>Экскурсии из Пятигорска в Приэльбрусье организуют все местные турагентства, стоимость — от 1500 рублей с человека.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── САНАТОРИИ ── -->
+  <div class="faq-category">
+    <div class="faq-category-title">Санатории и лечение</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Как выбрать санаторий под своё заболевание?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Ориентируйтесь на специализацию города и санатория:</p>
+        <ul>
+          <li><strong>Кисловодск</strong> — сердечно-сосудистые заболевания, органы дыхания, нервная система</li>
+          <li><strong>Ессентуки</strong> — желудочно-кишечный тракт, печень, желчевыводящие пути, сахарный диабет</li>
+          <li><strong>Пятигорск</strong> — опорно-двигательный аппарат, кожные, гинекологические заболевания (радоновые ванны)</li>
+          <li><strong>Железноводск</strong> — почки, мочеполовая система, ЖКТ</li>
+        </ul>
+        <p>Перед бронированием запросите у санатория список показаний и противопоказаний и проконсультируйтесь со своим лечащим врачом.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Можно ли получить процедуры без путёвки?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Да. Большинство санаториев КМВ предлагают <strong>амбулаторное лечение</strong> — отдельные процедуры без проживания. Вы можете жить в гостинице и каждый день приходить на ванны, физиотерапию или грязелечение.</p>
+        <p>Стоимость отдельных процедур — от 500 до 3000 рублей. Для получения ряда процедур понадобится осмотр санаторного врача (обычно платный, 500–1500 рублей), который выпишет назначение.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Нужно ли брать медицинские документы?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Для санаторного лечения — <strong>желательно</strong>. Возьмите с собой:</p>
+        <ul>
+          <li>Выписку от лечащего врача с диагнозом и рекомендациями</li>
+          <li>Результаты свежих анализов (общий анализ крови и мочи, ЭКГ)</li>
+          <li>Справку об отсутствии инфекционных заболеваний (для некоторых санаториев)</li>
+          <li>Полис ОМС и СНИЛС (для федеральных санаториев по направлению)</li>
+        </ul>
+        <p>Для обычного туристического отдыха без лечения документы не нужны.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Сколько стоит отдых в санатории?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Цены сильно варьируются в зависимости от уровня санатория и сезона:</p>
+        <ul>
+          <li><strong>Эконом (3 звезды)</strong> — от 3 500 до 5 000 ₽ в сутки с лечением и питанием</li>
+          <li><strong>Стандарт (4 звезды)</strong> — от 5 000 до 8 000 ₽ в сутки</li>
+          <li><strong>Премиум (5 звёзд)</strong> — от 10 000 до 20 000 ₽ в сутки</li>
+        </ul>
+        <p>Минимальный рекомендуемый курс — <strong>14 дней</strong>. Более короткие сроки дают меньший терапевтический эффект. В межсезонье (ноябрь–март) цены на 20–40% ниже.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── МИНЕРАЛЬНАЯ ВОДА ── -->
+  <div class="faq-category">
+    <div class="faq-category-title">Минеральная вода</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Можно ли пить воду из бюветов бесплатно?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>В большинстве городских бюветов вода <strong>бесплатна</strong>. Главные бюветы — Нарзанная галерея в Кисловодске, питьевые галереи в Курортном парке Ессентуков, Цветник в Пятигорске — открыты для всех желающих.</p>
+        <p>Некоторые источники на территории санаториев доступны только для гостей или за символическую плату (10–50 рублей за стакан). Возьмите с собой складной стаканчик — у бюветов они не всегда есть.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Можно ли увезти минеральную воду домой?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Можно, но с оговорками. Вода из бювета начинает терять углекислоту и часть биологически активных свойств уже через несколько часов после набора. Для перевозки домой она подходит, но терапевтический эффект будет значительно слабее, чем у свежей.</p>
+        <p>Лучше купить <strong>промышленно разлитую воду</strong> в местных магазинах — Ессентуки №4, №17, Нарзан, Смирновская. Она разлита под давлением и сохраняет свойства дольше. Везти из бювета имеет смысл только для питья в течение дня.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Почему минеральная вода из бювета лучше бутылочной?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Вода непосредственно из источника содержит максимальное количество растворённого углекислого газа, биологически активных компонентов и микроэлементов в нативном состоянии. При промышленном розливе часть из них неизбежно теряется.</p>
+        <p>Кроме того, температура воды у источника строго определённая и терапевтически значимая — в бутылке она всегда комнатная или охлаждённая. Тем не менее промышленная вода сохраняет большинство лечебных свойств и значительно лучше, чем полное её отсутствие.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── БЫТ И ДЕНЬГИ ── -->
+  <div class="faq-category">
+    <div class="faq-category-title">Быт и деньги</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Дорого ли отдыхать на КМВ?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>КМВ — один из <strong>доступных курортных регионов</strong> России. Ориентировочный бюджет на человека в день без санатория:</p>
+        <ul>
+          <li>Жильё (гостиница 3*) — 2 000–4 000 ₽</li>
+          <li>Питание (кафе, рынок) — 600–1 200 ₽</li>
+          <li>Транспорт по региону — 200–400 ₽</li>
+          <li>Входные билеты и экскурсии — 300–800 ₽</li>
+        </ul>
+        <p>Итого: от <strong>3 000 до 6 500 ₽ в день</strong> на человека — вполне бюджетный отдых по меркам российских курортов. Сочи и Крым в сезон обойдутся значительно дороже.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Что обязательно попробовать из еды?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>КМВ — многонациональный регион, здесь переплетаются русская, кавказская и степная кухни. Обязательно попробуйте:</p>
+        <ul>
+          <li><strong>Шашлык</strong> — баранина и свинина на мангале, лучший в небольших придорожных кафе</li>
+          <li><strong>Хинкали</strong> — грузинские пельмени, очень популярны в регионе</li>
+          <li><strong>Айран и кефир</strong> — свежие местные кисломолочные продукты на рынках</li>
+          <li><strong>Осетинские пироги</strong> — с мясом, сыром или картофелем</li>
+          <li><strong>Пастила и варенье</strong> из местных ягод и плодов</li>
+          <li><strong>Чебуреки</strong> — хрустящие с бараниной, особенно хороши в Пятигорске</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Есть ли проблемы с интернетом и связью?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>В самих городах КМВ связь хорошая — все основные операторы (МТС, Билайн, МегаФон, Т2) обеспечивают уверенный 4G. В гостиницах и кафе есть Wi-Fi.</p>
+        <p>На горных маршрутах и в ущельях сигнал может пропадать или быть нестабильным. Перед выходом на маршрут скачайте офлайн-карты и сообщите маршрут кому-нибудь. В санаториях связь обычно хорошая, хотя в некоторых старых корпусах Wi-Fi слабоват — уточняйте при бронировании.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">
+        <span class="faq-q-text">Безопасны ли на КМВ для туристов?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>КМВ — <strong>безопасный регион</strong> для туристов. Города курортные, туристическая инфраструктура хорошо развита, местные жители привыкли к приезжим и в целом доброжелательны.</p>
+        <p>Стандартные меры предосторожности как в любом туристическом месте: не оставляйте ценности в машине на виду, следите за документами на рынках, не ходите в одиночку по горным маршрутам в темноте. Соблюдайте уважение к местным традициям — регион многонациональный и религиозный.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<footer>
+  <a href="kmv_guide.html" class="footer-back">← Вернуться на главную</a>
+</footer>
+
+<script>
+function toggle(qEl) {
+  qEl.parentElement.classList.toggle('open');
+}
+
+function toggleMenu() {
+  const open = document.getElementById('sideMenu').classList.toggle('open');
+  document.getElementById('menuOverlay').classList.toggle('open', open);
+  document.getElementById('burgerBtn').classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function closeMenu() {
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+(function() {
+  const header = document.getElementById('pageHeader');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        header.classList.toggle('scrolled', window.scrollY > 40);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+})();
+</script>
+</body>
+</html>

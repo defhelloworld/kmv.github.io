@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Что нужно знать — КМВ Путеводитель</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0000FF;
+    --blue-dark: #0000cc;
+    --blue-light: #3399ff;
+    --white: #ffffff;
+    --text: #1a2a3a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'PT Sans', sans-serif;
+    color: white;
+    line-height: 1.7;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url('images/about_bg.png') center center / cover no-repeat;
+    filter: blur(6px);
+    transform: scale(1.05);
+    z-index: -2;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.78);
+    z-index: -1;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: rgba(0,0,180,0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: padding 0.35s ease, background 0.35s ease;
+  }
+
+  header.scrolled {
+    background: rgba(0,0,140,0.82);
+    backdrop-filter: blur(24px);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    transition: padding 0.35s ease;
+  }
+
+  header.scrolled .header-inner { padding: 8px 32px; }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 48px;
+    height: 33px;
+    flex-shrink: 0;
+    mix-blend-mode: screen;
+    transition: width 0.35s, height 0.35s;
+  }
+
+  header.scrolled .logo-icon { width: 36px; height: 25px; }
+
+  .logo-text {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    white-space: nowrap;
+    transition: font-size 0.35s, opacity 0.35s;
+  }
+
+  header.scrolled .logo-text { font-size: 0.72rem; opacity: 0.65; }
+
+  .burger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    z-index: 201;
+    position: relative;
+  }
+
+  .burger-btn:hover { background: rgba(255,255,255,0.1); }
+
+  .burger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+    transform-origin: center;
+  }
+
+  .burger-btn.open .burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger-btn.open .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .burger-btn.open .burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(4px);
+    z-index: 150;
+  }
+
+  .menu-overlay.open { display: block; }
+
+  .side-menu {
+    position: fixed;
+    top: 0; right: 0;
+    width: 280px;
+    height: 100vh;
+    background: #2a2a2e;
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.5);
+  }
+
+  .side-menu.open { transform: translateX(0); }
+
+  .side-menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    min-height: 64px;
+  }
+
+  .side-menu-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .side-menu-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .side-menu-close:hover { color: white; background: rgba(255,255,255,0.08); }
+
+  .side-menu-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+    flex: 1;
+  }
+
+  .side-menu-nav a {
+    display: block;
+    padding: 14px 28px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 600;
+    transition: background 0.15s, color 0.15s, padding-left 0.2s;
+    border-left: 3px solid transparent;
+  }
+
+  .side-menu-nav a:hover {
+    background: rgba(255,255,255,0.06);
+    color: white;
+    padding-left: 34px;
+    border-left-color: var(--blue-light);
+  }
+
+  .side-menu-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 8px 28px;
+  }
+
+  .side-menu-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    padding: 8px 28px 4px;
+  }
+
+  /* ===== PAGE HERO ===== */
+  .page-hero {
+    padding: 64px 32px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+    letter-spacing: 0.04em;
+  }
+
+  .breadcrumb a {
+    color: var(--blue-light);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  .page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .page-subtitle {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.55);
+    max-width: 600px;
+  }
+
+  /* ===== CONTENT ===== */
+  .content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* ===== BLOCK ===== */
+  .know-block {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .know-block-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 32px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .know-block-header:hover { background: rgba(255,255,255,0.04); }
+
+  .know-block-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    background: rgba(51,153,255,0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .know-block-meta { flex: 1; }
+
+  .know-block-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+  }
+
+  .know-block-desc {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .know-block-chevron {
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.3);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .know-block.open .know-block-chevron { transform: rotate(180deg); }
+
+  .know-block-body {
+    display: none;
+    padding: 32px;
+    animation: fadeDown 0.25s ease;
+  }
+
+  .know-block.open .know-block-body { display: block; }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== CARDS GRID ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .cards-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .info-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .info-card-icon { font-size: 1.4rem; margin-bottom: 8px; }
+
+  .info-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .info-card p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.55;
+  }
+
+  /* ===== ALERT CARDS ===== */
+  .alert {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .alert-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+
+  .alert-body { flex: 1; }
+
+  .alert-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .alert p { font-size: 0.85rem; line-height: 1.55; }
+
+  .alert-danger {
+    background: rgba(220,50,50,0.15);
+    border: 1px solid rgba(220,50,50,0.3);
+    color: rgba(255,200,200,0.9);
+  }
+
+  .alert-danger .alert-title { color: #ff8080; }
+
+  .alert-warn {
+    background: rgba(220,150,0,0.15);
+    border: 1px solid rgba(220,150,0,0.3);
+    color: rgba(255,230,180,0.9);
+  }
+
+  .alert-warn .alert-title { color: #ffcc66; }
+
+  .alert-good {
+    background: rgba(30,160,80,0.15);
+    border: 1px solid rgba(30,160,80,0.3);
+    color: rgba(180,255,200,0.9);
+  }
+
+  .alert-good .alert-title { color: #66ffaa; }
+
+  .alert-info {
+    background: rgba(51,153,255,0.12);
+    border: 1px solid rgba(51,153,255,0.25);
+    color: rgba(180,220,255,0.9);
+  }
+
+  .alert-info .alert-title { color: var(--blue-light); }
+
+  /* ===== SUBSECTION ===== */
+  .subsection {
+    margin-bottom: 28px;
+  }
+
+  .subsection:last-child { margin-bottom: 0; }
+
+  .subsection-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ===== LIST ===== */
+  .know-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .know-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+  }
+
+  .know-list li::before {
+    content: '—';
+    color: var(--blue-light);
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  /* ===== TABLE ===== */
+  .water-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+  }
+
+  .water-table th {
+    background: rgba(51,153,255,0.2);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .water-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.75);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  .water-table tr:last-child td { border-bottom: none; }
+  .water-table tr:hover td { background: rgba(255,255,255,0.04); }
+
+  .water-name {
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+  }
+
+  /* ===== TICKS HIGHLIGHT ===== */
+  .tick-highlight {
+    background: rgba(220,50,50,0.1);
+    border: 1px solid rgba(220,50,50,0.2);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+
+  .tick-highlight-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ff8080;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ===== DIVIDER ===== */
+  .block-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 24px 0;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: rgba(0,0,180,0.55);
+    backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 28px 32px;
+    text-align: center;
+  }
+
+  .footer-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .footer-back:hover { color: white; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="pageHeader">
+  <div class="header-inner">
+    <a href="kmv_guide.html" class="logo">
+      <img src="images/mountain_icon.png" alt="Горы" class="logo-icon">
+      <span class="logo-text">КМВ &nbsp;·&nbsp; Путеводитель</span>
+    </a>
+    <button class="burger-btn" id="burgerBtn" onclick="toggleMenu()">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="side-menu" id="sideMenu">
+  <div class="side-menu-top">
+    <span class="side-menu-logo">КМВ</span>
+    <button class="side-menu-close" onclick="closeMenu()">✕</button>
+  </div>
+  <nav class="side-menu-nav">
+    <div class="side-menu-label">Навигация</div>
+    <a href="kmv_guide.html#about"       onclick="closeMenu()">Главное о КМВ</a>
+    <a href="kmv_guide.html#afisha"      onclick="closeMenu()">Афиша</a>
+    <a href="kmv_guide.html#attractions" onclick="closeMenu()">Достопримечательности</a>
+    <a href="kmv_guide.html#sanatoria"   onclick="closeMenu()">Санатории</a>
+    <div class="side-menu-divider"></div>
+    <div class="side-menu-label">Полезное</div>
+    <a href="know.html"  onclick="closeMenu()">Что нужно знать?</a>
+    <a href="faq.html"   onclick="closeMenu()">FAQ</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="breadcrumb">
+    <a href="kmv_guide.html">← Главная</a> &nbsp;/&nbsp; Что нужно знать
+  </div>
+  <h1 class="page-title">Что нужно знать<br>перед поездкой на КМВ</h1>
+  <p class="page-subtitle">Практические советы, правила безопасности и важная информация для туристов</p>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ══════════════════════════════════════
+       БЛОК 1 — МИНЕРАЛЬНАЯ ВОДА
+  ═══════════════════════════════════════ -->
+  <div class="know-block open" id="block-water">
+    <div class="know-block-header" onclick="toggleBlock('block-water')">
+      <div class="know-block-icon">💧</div>
+      <div class="know-block-meta">
+        <div class="know-block-title">Минеральная вода КМВ</div>
+        <div class="know-block-desc">Польза, вред, правила приёма, виды воды</div>
+      </div>
+      <div class="know-block-chevron">▾</div>
+    </div>
+    <div class="know-block-body">
+
+      <div class="subsection">
+        <div class="subsection-title">💧 Что такое минеральная вода КМВ</div>
+        <p style="color:rgba(255,255,255,0.7); font-size:0.92rem; margin-bottom:16px;">
+          Кавказские Минеральные Воды — крупнейший в России бальнеологический регион. Здесь сосредоточено более 130 источников минеральной воды 30 различных типов. Каждый тип обладает уникальным химическим составом и показан при разных заболеваниях. Это не просто вкусная вода — это лекарственное средство, и обращаться с ним нужно соответственно.
+        </p>
+        <div class="alert alert-warn">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-body">
+            <div class="alert-title">Важно помнить</div>
+            <p>Минеральная вода — это лечебное средство. Самостоятельный бесконтрольный приём без назначения врача может нанести вред здоровью. Особенно это касается воды с высокой минерализацией — Ессентуки №4 и №17.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">🗂 Основные воды региона</div>
+        <table class="water-table">
+          <thead>
+            <tr>
+              <th>Вода</th>
+              <th>Тип</th>
+              <th>Профиль лечения</th>
+              <th>Минерализация</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="water-name">Нарзан (Кисловодск)</td>
+              <td>Углекислая сульфатно-гидрокарбонатная</td>
+              <td>Сердечно-сосудистые, обмен веществ, почки</td>
+              <td>2–3 г/л</td>
+            </tr>
+            <tr>
+              <td class="water-name">Ессентуки №4</td>
+              <td>Хлоридно-гидрокарбонатная натриевая</td>
+              <td>ЖКТ, печень, диабет 2 типа, желчевыводящие пути</td>
+              <td>8–10 г/л</td>
+            </tr>
+            <tr>
+              <td class="water-name">Ессентуки №17</td>
+              <td>Хлоридно-гидрокарбонатная натриевая (крепкая)</td>
+              <td>Хронические гастриты, колиты, болезни печени</td>
+              <td>10–14 г/л</td>
+            </tr>
+            <tr>
+              <td class="water-name">Пятигорский нарзан</td>
+              <td>Углекислая сульфатно-кальциевая</td>
+              <td>Опорно-двигательный аппарат, кожные болезни</td>
+              <td>3–5 г/л</td>
+            </tr>
+            <tr>
+              <td class="water-name">Железноводская (Смирновская)</td>
+              <td>Гидрокарбонатно-сульфатно-кальциевая</td>
+              <td>Почки, мочевыводящие пути, ЖКТ</td>
+              <td>3–4 г/л</td>
+            </tr>
+            <tr>
+              <td class="water-name">Славяновская</td>
+              <td>Гидрокарбонатно-сульфатная кальциево-натриевая</td>
+              <td>Почки, мочекаменная болезнь, ЖКТ</td>
+              <td>3–4 г/л</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">✅ Польза минеральной воды</div>
+        <div class="cards-grid">
+          <div class="info-card">
+            <div class="info-card-icon">🫀</div>
+            <div class="info-card-title">Сердце и сосуды</div>
+            <p>Нарзан улучшает кровообращение, снижает давление, укрепляет сосудистые стенки. Углекислота расширяет капилляры и тренирует сердечную мышцу.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🫁</div>
+            <div class="info-card-title">ЖКТ и печень</div>
+            <p>Ессентукская вода нормализует кислотность желудка, улучшает желчеотток, восстанавливает микрофлору кишечника, помогает при хронических гастритах и колитах.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🦴</div>
+            <div class="info-card-title">Суставы и кости</div>
+            <p>Воды с высоким содержанием кальция и кремния способствуют восстановлению хрящевой ткани, снижают воспаление при артрозе и артрите.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🩺</div>
+            <div class="info-card-title">Обмен веществ</div>
+            <p>Регулярный питьевой курс нормализует уровень сахара в крови, снижает холестерин, улучшает работу щитовидной железы.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">💪</div>
+            <div class="info-card-title">Иммунитет</div>
+            <p>Микроэлементы (магний, цинк, кремний, железо) в природной концентрации усваиваются значительно лучше, чем из препаратов, повышая защитные силы организма.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🧠</div>
+            <div class="info-card-title">Нервная система</div>
+            <p>Магний в составе нарзана снижает тревожность, нормализует сон, уменьшает мышечные спазмы и головные боли напряжения.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">⛔ Вред и противопоказания</div>
+        <div class="alert alert-danger">
+          <div class="alert-icon">🚫</div>
+          <div class="alert-body">
+            <div class="alert-title">Абсолютные противопоказания для питьевого курса</div>
+            <p>Острые воспалительные заболевания ЖКТ (гастрит в стадии обострения, язва в острой фазе, панкреатит) · Мочекаменная болезнь в стадии обострения · Онкологические заболевания · Хроническая почечная недостаточность · Сердечная недостаточность III степени</p>
+          </div>
+        </div>
+        <div class="alert alert-warn">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-body">
+            <div class="alert-title">Вред от бесконтрольного приёма</div>
+            <p>Избыточное употребление высокоминерализованной воды (Ессентуки №17) нарушает водно-солевой баланс, перегружает почки, повышает давление. Холодная минеральная вода при язве желудка может спровоцировать обострение. Газированный нарзан противопоказан при рефлюкс-эзофагите.</p>
+          </div>
+        </div>
+        <ul class="know-list">
+          <li>Не пить минеральную воду из источников горстями и в неограниченном количестве — это не обычная вода</li>
+          <li>Стандартный питьевой курс назначается врачом: 150–250 мл за 30 минут до еды, 3 раза в день, курсом 3–4 недели</li>
+          <li>Перед питьём из бювета уточните тип воды — не все источники одинаково полезны для вас лично</li>
+          <li>Не смешивайте воды разных источников без рекомендации специалиста</li>
+        </ul>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">📋 Правила приёма для туристов</div>
+        <div class="cards-grid-2">
+          <div class="info-card">
+            <div class="info-card-icon">🕐</div>
+            <div class="info-card-title">Когда пить</div>
+            <p>За 30 минут до еды — при повышенной кислотности. За 15 минут — при нормальной. Через 1–1,5 часа после еды — при пониженной кислотности. Лучше пить тёплой (38–40°C), маленькими глотками.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🥛</div>
+            <div class="info-card-title">Сколько пить</div>
+            <p>Туристам без назначения врача рекомендуется не более 1 стакана (200–250 мл) в день из бювета. Полноценный лечебный курс — строго по назначению санаторного врача.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🌡️</div>
+            <div class="info-card-title">Температура</div>
+            <p>Тёплая вода (38–42°C) расслабляет спазм желчевыводящих путей. Комнатная (20–25°C) стимулирует перистальтику кишечника. Холодная — противопоказана при большинстве заболеваний ЖКТ.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🧴</div>
+            <div class="info-card-title">Из бювета или бутылки?</div>
+            <p>Вода из бювета максимально полезна — она свежая, не успела потерять газ и биологически активные компоненты. Бутылочная вода со временем теряет часть свойств, особенно углекислоту.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-good">
+        <div class="alert-icon">💡</div>
+        <div class="alert-body">
+          <div class="alert-title">Совет туристу</div>
+          <p>Если вы приехали просто на отдых — попробуйте воду из бюветов в Нарзанной галерее Кисловодска или в Цветнике Пятигорска. Это интересный опыт. Но не пейте по несколько стаканов подряд — удовольствие может превратиться в расстройство желудка.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       БЛОК 2 — ПРИРОДА И БЕЗОПАСНОСТЬ
+  ═══════════════════════════════════════ -->
+  <div class="know-block open" id="block-nature">
+    <div class="know-block-header" onclick="toggleBlock('block-nature')">
+      <div class="know-block-icon">🏔️</div>
+      <div class="know-block-meta">
+        <div class="know-block-title">Природа и безопасность</div>
+        <div class="know-block-desc">Клещи, горные маршруты, погода, правила для туристов</div>
+      </div>
+      <div class="know-block-chevron">▾</div>
+    </div>
+    <div class="know-block-body">
+
+      <!-- КЛЕЩИ -->
+      <div class="tick-highlight">
+        <div class="tick-highlight-title">🕷️ Клещевая опасность на КМВ — серьёзная угроза</div>
+        <p style="color:rgba(255,200,200,0.85); font-size:0.9rem; margin-bottom:14px;">
+          КМВ — один из наиболее эндемичных по клещевому энцефалиту регионов России. Клещи активны с марта по ноябрь, пик — апрель–июнь и август–сентябрь. Они встречаются в лесопарках, на туристических тропах, в траве и кустарниках. Ежегодно в регионе фиксируются сотни случаев укусов.
+        </p>
+        <div class="alert alert-danger" style="margin-bottom:12px;">
+          <div class="alert-icon">💉</div>
+          <div class="alert-body">
+            <div class="alert-title">Вакцинация — лучшая защита</div>
+            <p>Если вы планируете активный отдых в лесах и горах КМВ — сделайте прививку от клещевого энцефалита заранее (минимум за 2 недели). Схема: две дозы с интервалом 1–3 месяца, ревакцинация через год, затем каждые 3 года.</p>
+          </div>
+        </div>
+        <ul class="know-list" style="margin-bottom:0;">
+          <li>Надевайте одежду с длинными рукавами и штанинами, заправляйте их в носки и перчатки</li>
+          <li>Используйте репелленты с ДЭТА (концентрация 25–50%) или перметрином на одежду</li>
+          <li>После каждой прогулки по лесу проводите полный осмотр тела — особенно подмышки, паховую область, шею, за ушами</li>
+          <li>Если клещ присосался — не давите и не жгите. Удалите специальным пинцетом или обратитесь в ближайший травмпункт</li>
+          <li>После укуса обратитесь к врачу в течение 72 часов для введения иммуноглобулина (экстренная профилактика)</li>
+          <li>Сохраните клеща в баночке — его можно отправить на анализ для определения заражённости</li>
+        </ul>
+      </div>
+
+      <div class="block-divider"></div>
+
+      <!-- ГОРНЫЕ МАРШРУТЫ -->
+      <div class="subsection">
+        <div class="subsection-title">⛰️ Правила безопасности на горных маршрутах</div>
+        <div class="alert alert-info">
+          <div class="alert-icon">ℹ️</div>
+          <div class="alert-body">
+            <div class="alert-title">Особенности рельефа КМВ</div>
+            <p>КМВ — это не альпинизм, но и не городская прогулка. Горы Машук, Бештау, Железная, Развалка имеют крутые склоны, скользкие тропы после дождей и резко меняющуюся погоду. Ежегодно туристы получают травмы из-за недооценки маршрутов.</p>
+          </div>
+        </div>
+        <div class="cards-grid">
+          <div class="info-card">
+            <div class="info-card-icon">👟</div>
+            <div class="info-card-title">Обувь</div>
+            <p>Только закрытая обувь с нескользящей подошвой. Кроссовки, треккинговые ботинки. Сандалии и шлёпанцы категорически не подходят для горных троп.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🎒</div>
+            <div class="info-card-title">Снаряжение</div>
+            <p>Возьмите с собой: воду (минимум 1,5 л), перекус, аптечку с пластырем и бинтом, дождевик, заряженный телефон, пауэрбанк, треккинговые палки на крутых участках.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">📱</div>
+            <div class="info-card-title">Связь и навигация</div>
+            <p>Скачайте офлайн-карты (Maps.me, OsmAnd) перед выходом — на вершинах сигнал может пропадать. Сообщите кому-то о маршруте и ожидаемом времени возвращения.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">⏰</div>
+            <div class="info-card-title">Время выхода</div>
+            <p>Начинайте маршруты рано утром. Во второй половине дня на КМВ часто начинаются грозы. Не выходите на открытые вершины после 14:00 в летнее время.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">👥</div>
+            <div class="info-card-title">Не ходите одни</div>
+            <p>На незнакомые маршруты лучше ходить группой минимум из 2–3 человек. Если идёте в одиночку — строго придерживайтесь обозначенных троп и сообщите маршрут знакомым.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🌧️</div>
+            <div class="info-card-title">Дождь и мокрые тропы</div>
+            <p>После дождя горные тропы КМВ становятся очень скользкими — особенно глинистые участки. Если начался дождь на маршруте — остановитесь и дождитесь паузы, не торопитесь на спуске.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ПОГОДА -->
+      <div class="subsection">
+        <div class="subsection-title">🌦️ Погода и природные опасности</div>
+        <div class="cards-grid-2">
+          <div class="alert alert-warn" style="margin-bottom:0;">
+            <div class="alert-icon">⚡</div>
+            <div class="alert-body">
+              <div class="alert-title">Грозы</div>
+              <p>Летом (июнь–август) грозы на КМВ — ежедневное явление во второй половине дня. При приближении грозы немедленно спускайтесь с открытых вершин и гребней. Не укрывайтесь под отдельно стоящими деревьями. Лучшее убежище — низина, кустарник, пещера (не у входа).</p>
+            </div>
+          </div>
+          <div class="alert alert-warn" style="margin-bottom:0;">
+            <div class="alert-icon">☀️</div>
+            <div class="alert-body">
+              <div class="alert-title">Перегрев и солнечный удар</div>
+              <p>Летом на открытых склонах температура достигает +35°C и выше. Носите головной убор, пользуйтесь солнцезащитным кремом SPF 50+. Пейте воду регулярно — не ждите чувства жажды. При головокружении, тошноте, слабости — немедленно в тень.</p>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <div class="alert alert-danger">
+          <div class="alert-icon">🐍</div>
+          <div class="alert-body">
+            <div class="alert-title">Змеи</div>
+            <p>На склонах гор КМВ водятся степные гадюки. Они не агрессивны и сами не нападают, но могут укусить если наступить или потревожить. Смотрите под ноги на каменистых склонах, не трогайте камни руками без осмотра. При укусе — обездвижьте конечность, не отсасывайте яд, срочно в больницу.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ОБЩИЕ ПРАВИЛА -->
+      <div class="subsection">
+        <div class="subsection-title">📌 Общие правила безопасности для туристов</div>
+        <div class="cards-grid-2">
+          <div class="info-card">
+            <div class="info-card-icon">🏥</div>
+            <div class="info-card-title">Экстренные номера</div>
+            <p>
+              <strong style="color:white">112</strong> — единый экстренный номер<br>
+              <strong style="color:white">103</strong> — скорая помощь<br>
+              <strong style="color:white">101</strong> — пожарные и МЧС<br>
+              Горноспасательная служба КМВ: <strong style="color:white">8 (8793) 97-38-38</strong>
+            </p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🏦</div>
+            <div class="info-card-title">Документы и деньги</div>
+            <p>Берите с собой паспорт или копию — на некоторых объектах (заповедники, нацпарки) могут потребоваться. Наличные пригодятся в горных сёлах и мелких кафе — там часто нет терминалов.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🌿</div>
+            <div class="info-card-title">Заповедные зоны</div>
+            <p>Многие природные объекты КМВ имеют охранный статус. Не сходите с обозначенных троп, не рвите растения, не разводите костры за пределами специально отведённых мест. Штрафы — от 3 000 до 150 000 рублей.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🐕</div>
+            <div class="info-card-title">Бродячие животные</div>
+            <p>В некоторых районах КМВ встречаются стаи бродячих собак. Не кормите, не провоцируйте. При агрессии — не бегите, встаньте боком, медленно отступайте. Укус — повод для прививки от бешенства.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;"></div>
+        <ul class="know-list">
+          <li>Страховка — обязательна. Оформите туристическую страховку с покрытием горного спасения перед поездкой</li>
+          <li>Зарядите телефон перед каждым выходом на маршрут и возьмите пауэрбанк</li>
+          <li>Не купайтесь в незнакомых водоёмах — горные реки КМВ коварны: быстрое течение, скользкие камни, резкие подъёмы уровня воды после дождей</li>
+          <li>На рынках и в кафе предпочитайте термически обработанную пищу — кишечные инфекции среди туристов КМВ не редкость летом</li>
+          <li>При посещении горных сёл и аулов уважайте местные обычаи и традиции — регион многонациональный</li>
+          <li>Не оставляйте мусор на природе: штрафы высокие, а экосистема КМВ очень уязвима</li>
+        </ul>
+      </div>
+
+      <div class="alert alert-good">
+        <div class="alert-icon">✅</div>
+        <div class="alert-body">
+          <div class="alert-title">Главное правило КМВ</div>
+          <p>КМВ — безопасный и гостеприимный регион. Большинство туристов возвращаются домой здоровыми и отдохнувшими. Соблюдайте базовые правила безопасности, не пренебрегайте советами местных гидов — и поездка подарит только приятные воспоминания.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<footer>
+  <a href="kmv_guide.html" class="footer-back">← Вернуться на главную</a>
+</footer>
+
+<script>
+function toggleBlock(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function toggleMenu() {
+  const open = document.getElementById('sideMenu').classList.toggle('open');
+  document.getElementById('menuOverlay').classList.toggle('open', open);
+  document.getElementById('burgerBtn').classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function closeMenu() {
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+// Header shrink on scroll
+(function() {
+  const header = document.getElementById('pageHeader');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        header.classList.toggle('scrolled', window.scrollY > 40);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+})();
+</script>
+</body>
+</html>
