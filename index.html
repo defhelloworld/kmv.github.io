@@ -1367,6 +1367,127 @@
     height: 2px;
     background: rgba(255, 255, 255, 0.15);
   }
+
+  /* ════════════════════════════════════════════════════════
+     МОБИЛЬНАЯ АДАПТАЦИЯ
+  ════════════════════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .header-inner { padding: 12px 18px; }
+    header.scrolled .header-inner { padding: 7px 18px; }
+    .logo-text { font-size: 0.7rem; }
+    .side-menu { width: 78%; max-width: 320px; }
+
+    .section-title { font-size: 1.5rem; margin-bottom: 16px; }
+
+    /* ABOUT */
+    #about .about-grid { padding: 48px 18px 40px; }
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .about-images { order: -1; }
+    .about-img-placeholder img,
+    .about-images img {
+      height: 220px !important;
+      width: 100% !important;
+    }
+    .weather-seasons { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .forecast-days {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .forecast-day:nth-child(n+5) { margin-top: 6px; }
+
+    /* AFISHA */
+    .afisha-inner { padding: 0 18px; }
+    .afisha-card { flex: 0 0 220px; width: 220px; }
+    .afisha-btn { width: 34px; height: 34px; font-size: 15px; }
+    .afisha-btn-left { left: -8px; }
+    .afisha-btn-right { right: -8px; }
+
+    /* ATTRACTIONS */
+    .attractions-inner { padding: 0 18px; }
+    .attraction-row {
+      flex-direction: column;
+      min-height: 0;
+    }
+    .attr-img {
+      width: calc(100% - 24px);
+      height: 160px;
+      margin: 12px 12px 0 12px;
+    }
+    .attr-content { padding: 14px 18px; }
+
+    /* SANATORIA */
+    .san-inner { padding: 0 18px; }
+    .picker-grid { gap: 8px; }
+    .picker-chip { font-size: 0.8rem; padding: 6px 12px; }
+    .picker-actions { flex-wrap: wrap; gap: 10px; }
+    .san-row {
+      flex-wrap: wrap;
+      padding: 16px 0;
+    }
+    .san-num { width: 30px; font-size: 1.1rem; }
+    .san-img-wrap {
+      width: 100px;
+      height: 70px;
+      margin: 0 14px 0 0;
+    }
+    .san-img,
+    .san-img-placeholder { width: 100px; height: 70px; }
+    .san-map-bubble {
+      width: 230px;
+      height: 160px;
+      left: 0;
+      transform: none;
+    }
+    .san-map-bubble::after { left: 50px; }
+    .san-info {
+      flex: 1 1 calc(100% - 114px);
+      min-width: 0;
+    }
+    .san-price { margin-top: 6px; }
+
+    /* FOOD */
+    .food-inner { padding: 0 18px; }
+    .food-row { flex-wrap: wrap; }
+    .food-type-badge { width: 28px; font-size: 1.1rem; }
+    .food-img-wrap {
+      width: 90px;
+      height: 70px;
+      margin: 0 12px 0 0;
+    }
+    .food-info { flex: 1 1 calc(100% - 130px); min-width: 0; }
+
+    /* FOOTER */
+    footer { padding: 28px 18px; }
+    .footer-inner {
+      flex-direction: column;
+      gap: 24px;
+    }
+    .footer-map {
+      width: 100%;
+      height: 220px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo-text { display: none; }
+    .section-title { font-size: 1.3rem; }
+    .weather-seasons { grid-template-columns: 1fr; }
+    .forecast-days { grid-template-columns: repeat(3, 1fr); }
+    .afisha-card { flex: 0 0 190px; width: 190px; }
+
+    .san-row { flex-direction: column; align-items: flex-start; }
+    .san-img-wrap { margin: 0 0 10px 0; }
+    .san-info { flex: 1 1 100%; }
+    .san-num { width: auto; margin-bottom: 6px; }
+
+    .food-row { flex-direction: column; align-items: flex-start; }
+    .food-img-wrap { margin: 8px 0; order: 2; }
+    .food-type-badge { order: 1; }
+    .food-info { order: 3; flex: 1 1 100%; }
+  }
 </style>
 </head>
 <body>

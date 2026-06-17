@@ -574,6 +574,45 @@
   }
 
   .footer-back:hover { color: white; }
+
+  /* ════════════════════════════════════════════════════════
+     МОБИЛЬНАЯ АДАПТАЦИЯ
+  ════════════════════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .header-inner { padding: 12px 18px; }
+    header.scrolled .header-inner { padding: 7px 18px; }
+    .logo-text { font-size: 0.7rem; }
+    .side-menu { width: 78%; max-width: 320px; }
+
+    .page-hero { padding: 44px 18px 32px; }
+    .page-title { font-size: 1.7rem; }
+    .page-subtitle { font-size: 0.92rem; }
+
+    .content { padding: 0 18px 56px; gap: 24px; }
+
+    .know-block-header { padding: 20px 18px 18px; gap: 12px; }
+    .know-block-icon { width: 42px; height: 42px; font-size: 1.5rem; }
+    .know-block-title { font-size: 1.05rem; }
+    .know-block-body { padding: 20px 18px; }
+
+    .cards-grid,
+    .cards-grid-2 {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .water-table { font-size: 0.78rem; }
+    .water-table th,
+    .water-table td { padding: 8px 8px; }
+
+    .tick-highlight { padding: 18px 16px; }
+  }
+
+  @media (max-width: 480px) {
+    .logo-text { display: none; }
+    .page-title { font-size: 1.4rem; }
+    .water-table { display: block; overflow-x: auto; white-space: nowrap; }
+  }
 </style>
 </head>
 <body>
@@ -581,7 +620,7 @@
 <!-- HEADER -->
 <header id="pageHeader">
   <div class="header-inner">
-    <a href="kmv_guide.html" class="logo">
+    <a href="index.html" class="logo">
       <img src="images/mountain_icon.png" alt="Горы" class="logo-icon">
       <span class="logo-text">КМВ &nbsp;·&nbsp; Путеводитель</span>
     </a>
@@ -601,10 +640,11 @@
   </div>
   <nav class="side-menu-nav">
     <div class="side-menu-label">Навигация</div>
-    <a href="kmv_guide.html#about"       onclick="closeMenu()">Главное о КМВ</a>
-    <a href="kmv_guide.html#afisha"      onclick="closeMenu()">Афиша</a>
-    <a href="kmv_guide.html#attractions" onclick="closeMenu()">Достопримечательности</a>
-    <a href="kmv_guide.html#sanatoria"   onclick="closeMenu()">Санатории</a>
+    <a href="index.html#about"       onclick="closeMenu()">Главное о КМВ</a>
+    <a href="index.html#afisha"      onclick="closeMenu()">Афиша</a>
+    <a href="index.html#attractions" onclick="closeMenu()">Достопримечательности</a>
+    <a href="index.html#sanatoria"   onclick="closeMenu()">Санатории</a>
+    <a href="index.html#food"        onclick="closeMenu()">Питание</a>
     <div class="side-menu-divider"></div>
     <div class="side-menu-label">Полезное</div>
     <a href="know.html"  onclick="closeMenu()">Что нужно знать?</a>
@@ -615,7 +655,7 @@
 <!-- HERO -->
 <div class="page-hero">
   <div class="breadcrumb">
-    <a href="kmv_guide.html">← Главная</a> &nbsp;/&nbsp; Что нужно знать
+    <a href="index.html">← Главная</a> &nbsp;/&nbsp; Что нужно знать
   </div>
   <h1 class="page-title">Что нужно знать<br>перед поездкой на КМВ</h1>
   <p class="page-subtitle">Практические советы, правила безопасности и важная информация для туристов</p>
@@ -969,7 +1009,7 @@
 </div><!-- /content -->
 
 <footer>
-  <a href="kmv_guide.html" class="footer-back">← Вернуться на главную</a>
+  <a href="index.html" class="footer-back">← Вернуться на главную</a>
 </footer>
 
 <script>
